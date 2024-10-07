@@ -42,7 +42,7 @@ const IssuesPage = () => {
           </div>
         ))}
       </div>
-      <Button className='mt-4'>
+      <Button className='mt-4' size='3'>
         <Link href={'/issues/new'}>Create An Issue</Link>
       </Button>
     </div>
