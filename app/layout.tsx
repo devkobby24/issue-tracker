@@ -30,7 +30,7 @@ export default function RootLayout({
           <main className="px-5">
             {children}
           </main>
-          <ThemePanel />
+          {/* <ThemePanel /> */}
         </Theme>
       </body>
     </html>
