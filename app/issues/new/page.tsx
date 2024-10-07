@@ -30,7 +30,7 @@ const NewIssuePage = () => {
   // console.log(register('title'));
   const [error, setError] = useState("");
 
-  const onSubmit=handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (data) => {
     try {
       setSubmitting(true);
       await axios.post("/api/issues", data);
