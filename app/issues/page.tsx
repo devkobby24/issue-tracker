@@ -29,7 +29,7 @@ const IssuesPage = () => {
 
   return (
     <div className="container mx-auto p-4 space-y-5">
-      <h1 className="text-2xl font-bold mb-4">Issues</h1>
+      <h1 className="text-2xl font-bold mb-4">My Issues</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {issues.map((issue) => (
           <div
