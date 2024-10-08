@@ -1,5 +1,7 @@
 'use client';
 import BarChart from './../components/BarChart';
+import PieChart from '../components/PieChart';
+import IssuesTable from '../components/IssuesTable';
 
 // Dummy Data: Array mimicking the structure of dailyStatistics
 const dummyData = [
@@ -25,11 +27,28 @@ const dummyData = [
   },
 ];
 
+const statusStatistics = [
+    { status: 'Open', count: 8 },
+    { status: 'In Progress', count: 5 },
+    { status: 'Closed', count: 7 },
+];
+
+// Sample data for the issues table
+const issues = [
+    { id: 1, title: 'Fix login bug', description: 'Users are unable to login with Google OAuth.', status: 'Open' },
+    { id: 2, title: 'Update dashboard UI', description: 'Redesign the dashboard with the new layout.', status: 'In Progress' },
+    { id: 3, title: 'Implement notifications', description: 'Add email notifications for new issues.', status: 'Closed' },
+    { id: 4, title: 'Improve performance', description: 'Optimize database queries for faster response times.', status: 'Open' },
+    { id: 5, title: 'Add dark mode', description: 'Allow users to toggle between light and dark themes.', status: 'In Progress' },
+];
+
 // Component that uses the dummy data
 const StatisticsPage = () => {
   return (
-    <div className="min-h-screen">
+    <div className="space-y-5 flex flex-col items-center min-h-svh">
       <BarChart dailyStatistics={dummyData} />
+      <PieChart statusStatistics={statusStatistics}  />
+      {/* <IssuesTable issues={issues} /> */}
     </div>
   );
 };
