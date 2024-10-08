@@ -39,12 +39,13 @@ const IssuesPage = () => {
 
       {loading ? ( // Show spinner while loading
         <div className="flex justify-center items-center h-64">
-          <l-line-spinner
+          {/* <l-line-spinner
             size="40"
             stroke="3"
             speed="1"
             color="voilet"
-          ></l-line-spinner>
+          ></l-line-spinner> */}
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500"></div>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
