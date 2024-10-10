@@ -41,9 +41,9 @@ const PieChart: React.FC<PieChartProps> = ({ statusStatistics }) => {
     };
 
     return (
-        <div className='flex flex-col items-center p-4'>
-            <h2 className="text-xl font-bold mb-4">Issue Status Distribution</h2>
-            <div className="max-w-xl w-full">
+        <div className='flex flex-col p-4'>
+            <h2 className="text-4xl font-bold mb-4">Issue Status Distribution</h2>
+            <div className="w-full items-center">
                 <Pie data={data} />
             </div>
         </div>
