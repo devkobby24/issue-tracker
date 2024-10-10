@@ -51,7 +51,7 @@ export default function Home() {
   return (
     <div className="p-6 space-y-4 flex flex-col items-center">
       <h1 className="text-4xl font-bold mb-4 text-gray-600 text-center">Issue Tracker <span className="block">Dashboard</span></h1>
-      <p className="text-sm md:text-lg text-gray-500 mb-4 text-center">Struggling to track issues in your project?🤷🏿 Our issue tracker makes it easy! Log, assign, and prioritize tasks with a user-friendly interface, real-time updates, and seamless collaboration. Whether you're a small team or managing a big project, stay organized, save time, and boost productivity. Get started today and streamline your workflow! </p>
+      <p className="text-sm md:text-lg text-gray-500 mb-4 text-center">Struggling to track issues in your project?🤷🏿 Our issue tracker makes it easy! Log, assign, and prioritize tasks with a user-friendly interface, real-time updates, and seamless collaboration👌🏾. Whether you're a small team or managing a big project👨🏾‍💻, stay organized, save time⌚, and boost productivity📈. Get started today and streamline your workflow!🚀 </p>
       <div className="space-x-2 space-y-2">
         <Link href="/issues/new">
           <Button size={"3"}>
