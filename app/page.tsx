@@ -49,7 +49,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="p-6 space-y-4 flex flex-col items-center">
+    <div className="p-2 space-y-4 flex flex-col items-center">
       <h1 className="text-4xl font-bold mb-4 text-gray-600 text-center">Issue Tracker <span className="block">Dashboard</span></h1>
       <p className="text-sm md:text-lg text-gray-500 mb-4 text-center">Struggling to track issues in your project?🤷🏿 Our issue tracker makes it easy! Log, assign, and prioritize tasks with a user-friendly interface, real-time updates, and seamless collaboration👌🏾. Whether you're a small team or managing a big project👨🏾‍💻, stay organized, save time⌚, and boost productivity📈. Get started today and streamline your workflow!🚀 </p>
       <div className="space-x-2 space-y-2">
@@ -65,7 +65,7 @@ export default function Home() {
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {issues.map((issue) => (
             <li key={issue.id} className="border p-4 rounded-lg shadow-md">
-              <h3 className="text-lg font-bold mb-2">{issue.title}</h3>
+              <h3 className="text-lg font-semibold font-sans mb-2">{issue.title.toUpperCase()}</h3>
               <p>
                 <span className="font-semibold">Description:</span> {issue.description}
               </p>

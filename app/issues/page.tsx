@@ -77,7 +77,7 @@ const IssuesPage = () => {
   
       const data = await response.json();
       window.location.reload();
-      alert('Issue status updated:');
+      console.log('Issue status updated:', data);
     } catch (error) {
       console.error('Error updating issue status:', error);
     }
@@ -85,7 +85,7 @@ const IssuesPage = () => {
   
 
   return (
-    <div className="container mx-auto p-4 space-y-5">
+    <div className="container mx-auto p-2 space-y-5 font-sans">
       <h1 className="text-2xl font-bold mb-4 flex">My Issues <FaBugs /></h1>
 
       {loading ? ( // Show spinner while loading
@@ -98,19 +98,19 @@ const IssuesPage = () => {
             issues.map((issue) => (
               <div
                 key={issue.id}
-                className="border border-gray-300 rounded-lg p-4 shadow hover:shadow-md transition-shadow duration-200"
+                className="border border-gray-300 rounded-lg p-4 shadow transition-all hover:scale-105 duration-200 space-y-2"
               >
                 <h2 className="text-lg font-semibold mb-2">{issue.title.toUpperCase()}</h2>
-                <p className="text-gray-500 mb-4">{issue.description}</p>
-                <p className="text-sm font-medium text-blue-500">Status: {issue.status}</p>
+                <p className="text-gray-500">{issue.description}</p>
+                <p className="text-sm font-medium text-blue-600">Status: {issue.status}</p>
                 <div className="flex space-x-2">
                 <Button
                   onClick={() => deleteIssue(issue.id)}
-                  className="rounded-full mt-9 text-red-500"
+                  className="text-red-500"
                 >
                   {/* Show icon on small screens, text on larger screens */}
                   <span className="block sm:hidden">
-                    <MdDeleteSweep />
+                    <MdDeleteSweep color='black'/>
                   </span>
                   <span className="hidden sm:block">{loading?'Loading...':'Delete'}</span>
                 </Button>

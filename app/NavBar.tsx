@@ -7,7 +7,6 @@ import classnames from 'classnames';
 
 const NavBar = () => {
     const currentPath = usePathname()
-    //   console.log(currentPath)
 
     const links = [
         { label: 'Dashboard', href: '/' },
@@ -15,7 +14,7 @@ const NavBar = () => {
         { label: 'Statistics', href: '/statistics' }
     ]
     return (
-        <nav className='flex space-x-6 border-b mb-5 px-4 h-14 items-center'>
+        <nav className='flex space-x-6 border-b mb-5 px-4 font-sans h-14 items-center'>
             <Link href="/">
                 <AiFillBug size={25} />
             </Link>
