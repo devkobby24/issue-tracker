@@ -12,11 +12,13 @@ import { createIssueSchema } from "@/app/validationSchema";
 import { z } from "zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
+import { useToast } from "@/hooks/use-toast";
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
 
 const NewIssuePage = () => {
+  const { toast } = useToast();
   const router = useRouter();
   const [isSubmitting, setSubmitting] = useState(false);
   const {
@@ -35,9 +37,11 @@ const NewIssuePage = () => {
       setSubmitting(true);
       await axios.post("/api/issues", data);
       router.push("/issues");
+      toast({ description: 'Issue created successfully' });
     } catch (error) {
       setSubmitting(false);
       setError("An error occurred");
+      toast({ description: 'An error occurred' });
     }
   })
 

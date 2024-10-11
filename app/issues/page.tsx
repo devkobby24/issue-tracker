@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { MdDeleteSweep } from "react-icons/md";
 import { FaBugs } from "react-icons/fa6";
 import IssueStatusButtons from '../status/IssueStatus';
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast"
 
 
 const IssuesPage = () => {
@@ -16,6 +16,7 @@ const IssuesPage = () => {
     status: string;
   }
 
+  const { toast } = useToast();
   const [issues, setIssues] = useState<Issue[]>([]);
   const [loading, setLoading] = useState<boolean>(true); // Add loading state
 
@@ -49,9 +50,9 @@ const IssuesPage = () => {
       if (response.ok) {
         // Remove the issue from the state after deletion
         setIssues(issues.filter((issue) => issue.id !== id));
-        toast('Issue deleted successfully');
+        toast({ description: 'Issue deleted successfully' });
       } else {
-        toast('Failed to delete the issue');
+        toast({ description: 'Failed to delete the issue' });
       }
     } catch (error) {
       console.error('Error deleting issue:', error);
@@ -70,20 +71,22 @@ const IssuesPage = () => {
         },
         body: JSON.stringify({ id, status }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to update issue status');
       }
-  
+
       const data = await response.json();
       window.location.reload();
       console.log('Issue status updated:', data);
+      toast({ description: 'Issue status updated' });
     } catch (error) {
+      toast({ description: 'Failed to update issue status' });
       console.error('Error updating issue status:', error);
     }
   };
-  
+
 
   return (
     <div className="container mx-auto p-2 space-y-5 font-sans">
@@ -105,17 +108,17 @@ const IssuesPage = () => {
                 <p className="text-gray-500">{issue.description}</p>
                 <p className="text-sm font-medium text-blue-600">Status: {issue.status}</p>
                 <div className="flex space-x-2">
-                <Button
-                  onClick={() => deleteIssue(issue.id)}
-                  className="text-red-500"
-                >
-                  {/* Show icon on small screens, text on larger screens */}
-                  <span className="block sm:hidden">
-                    <MdDeleteSweep color='black'/>
-                  </span>
-                  <span className="hidden sm:block">{loading?'Loading...':'Delete'}</span>
-                </Button>
-                <IssueStatusButtons issue={issue} updateIssueStatus={updateIssueStatus} />
+                  <Button
+                    onClick={() => deleteIssue(issue.id)}
+                    className="text-red-500"
+                  >
+                    {/* Show icon on small screens, text on larger screens */}
+                    <span className="block sm:hidden">
+                      <MdDeleteSweep color='black' />
+                    </span>
+                    <span className="hidden sm:block">{loading ? 'Loading...' : 'Delete'}</span>
+                  </Button>
+                  <IssueStatusButtons issue={issue} updateIssueStatus={updateIssueStatus} />
                 </div>
               </div>
             ))

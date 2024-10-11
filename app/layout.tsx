@@ -6,6 +6,7 @@ import { Inter } from 'next/font/google'
 import NavBar from './NavBar'
 import { Theme, ThemePanel } from "@radix-ui/themes";
 import Footer from "./components/Footer";
+import { Toaster } from "@/components/ui/toaster"
 
 
 const inter = Inter({
@@ -32,6 +33,7 @@ export default function RootLayout({
             {children}
             {/* <ThemePanel /> */}
           </main>
+          <Toaster />
           <Footer />
         </Theme>
       </body>
