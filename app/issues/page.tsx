@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { MdDeleteSweep } from "react-icons/md";
 import { FaBugs } from "react-icons/fa6";
 import IssueStatusButtons from '../status/IssueStatus';
+import { toast } from "sonner";
 
 
 const IssuesPage = () => {
@@ -48,9 +49,9 @@ const IssuesPage = () => {
       if (response.ok) {
         // Remove the issue from the state after deletion
         setIssues(issues.filter((issue) => issue.id !== id));
-        alert('Issue deleted successfully');
+        toast('Issue deleted successfully');
       } else {
-        alert('Failed to delete the issue');
+        toast('Failed to delete the issue');
       }
     } catch (error) {
       console.error('Error deleting issue:', error);

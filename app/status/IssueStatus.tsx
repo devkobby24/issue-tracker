@@ -19,7 +19,7 @@ const IssueStatusButtons: React.FC<IssueStatusButtonsProps> = ({ issue, updateIs
       {/* Button for Open */}
       <Button
         onClick={() => updateIssueStatus(issue.id, 'OPEN')}
-        className={`px-4 py-2 rounded ${
+        className={`p-2 rounded ${
           issue.status === 'OPEN' ? 'bg-green-500 text-white' : 'bg-gray-300'
         }`}
         disabled={issue.status === 'OPEN'}
@@ -30,7 +30,7 @@ const IssueStatusButtons: React.FC<IssueStatusButtonsProps> = ({ issue, updateIs
       {/* Button for In Progress */}
       <Button
         onClick={() => updateIssueStatus(issue.id, 'IN_PROGRESS')}
-        className={`px-4 py-2 rounded ${
+        className={`p-2 rounded ${
           issue.status === 'IN_PROGRESS' ? 'bg-yellow-500 text-white' : 'bg-gray-300'
         }`}
         disabled={issue.status === 'IN_PROGRESS'}
@@ -41,7 +41,7 @@ const IssueStatusButtons: React.FC<IssueStatusButtonsProps> = ({ issue, updateIs
       {/* Button for Closed */}
       <Button
         onClick={() => updateIssueStatus(issue.id, 'CLOSED')}
-        className={`px-4 py-2 rounded ${
+        className={`p-2 rounded ${
           issue.status === 'CLOSED' ? 'bg-red-500 text-white' : 'bg-gray-300'
         }`}
         disabled={issue.status === 'CLOSED'}
