@@ -11,6 +11,7 @@ import { LiaDoorOpenSolid } from "react-icons/lia";
 import { Button } from "@/components/ui/button";
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
+import Image from 'next/image';
 
 const NavBar = () => {
     const router = useRouter();
@@ -83,7 +84,7 @@ const NavBar = () => {
                 {user ? (
                     <Popover>
                         <PopoverTrigger asChild>
-                            <img
+                            <Image
                                 src={user.picture} // Uncomment to use user picture
                                 alt="User Profile"
                                 className="rounded-full w-9 h-9 cursor-pointer"
