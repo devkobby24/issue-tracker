@@ -9,7 +9,6 @@ import {
 } from 'chart.js';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../service/FireBaseConfig';
-import { getAuth } from 'firebase/auth';
 
 // Register the necessary chart.js components
 ChartJS.register(ArcElement, Title, Tooltip, Legend);
@@ -27,15 +26,16 @@ const PieChart: React.FC = () => {
         const fetchUserIssues = async () => {
             setLoading(true); // Set loading state to true
             try {
-                const auth = getAuth();
-                const user = auth.currentUser; // Get the current authenticated user
+                // Fetch user from localStorage
+                const userData = localStorage.getItem("user");
+                const user = userData ? JSON.parse(userData) : null;
 
-                if (!user) {
-                    console.error('No user is currently logged in.');
-                    return; // Exit if no user is logged in
+                if (!user || !user.email) {
+                    console.error('No user found in localStorage.');
+                    return; // Exit if no user found
                 }
 
-                const userEmail = user.email; // Get user's email
+                const userEmail = user.email; // Get user's email from localStorage
                 const issuesQuery = query(collection(db, 'issues'), where("userEmail", "==", userEmail)); // Query to fetch user's issues
 
                 const querySnapshot = await getDocs(issuesQuery);

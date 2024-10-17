@@ -61,6 +61,7 @@ const NewIssuePage = () => {
         ...data, // Spread the form data
         userEmail: user.email, // Include the user's email
         id: uniqueId, // Add the unique document ID
+        createdAt: Date.now(), // Include the current timestamp
       });
   
       router.push("/issues"); // Redirect to the issues page
