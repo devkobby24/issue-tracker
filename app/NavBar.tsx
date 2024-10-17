@@ -1,33 +1,102 @@
 'use client';
-import Link from 'next/link'
+
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React from 'react'
+import React, { useState, useEffect } from "react";
 import { AiFillBug } from "react-icons/ai";
-import classnames from 'classnames';
+import classNames from 'classnames'; // Use camelCase for consistency
+import axios from "axios";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { LiaDoorOpenSolid } from "react-icons/lia";
+import { Button } from "@/components/ui/button";
+import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 
 const NavBar = () => {
-    const currentPath = usePathname()
+    const [user, setUser] = useState<any>(null); // Specify type for user if using TypeScript
+    const currentPath = usePathname();
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
+
+    // Handle Google Login
+    const login = useGoogleLogin({
+        onSuccess: async (codeResponse) => {
+            try {
+                const { data: userData } = await axios.get(
+                    "https://www.googleapis.com/oauth2/v1/userinfo",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${codeResponse.access_token}`,
+                        },
+                    }
+                );
+
+                setUser(userData);
+                localStorage.setItem("user", JSON.stringify(userData));
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        },
+        onError: (error) => console.error("Login Failed:", error),
+    });
 
     const links = [
         { label: 'Dashboard', href: '/' },
         { label: 'Issues', href: '/issues' },
-        { label: 'Statistics', href: '/statistics' }
-    ]
+        { label: 'Statistics', href: '/statistics' },
+    ];
+
+    const handleLogout = () => {
+        googleLogout();
+        localStorage.removeItem("user");
+        setUser(null); // Reset user state
+    };
+
     return (
-        <nav className='flex space-x-6 border-b mb-5 px-4 font-sans h-14 items-center'>
-            <Link href="/">
+        <nav className='flex space-x-6 border-b mb-5 px-4 font-sans h-14 items-center justify-between'>
+            <Link href="/" aria-label="Home">
                 <AiFillBug size={25} />
             </Link>
             <ul className='flex space-x-6'>
-                {links.map((link) => <Link key={link.href} className={classnames({ 'text-zinc-900': currentPath === link.href,
-                'text-zinc-500': currentPath !== link.href,
-                'hover:text-zinc-900 transition-colors': true
-                 })}  
-                    href={link.href}>{link.label}</Link>
-                )}
+                {links.map(({ href, label }) => (
+                    <Link key={href} 
+                          className={classNames({
+                              'text-zinc-900': currentPath === href,
+                              'text-zinc-500': currentPath !== href,
+                              'hover:text-zinc-900 transition-colors': true,
+                          })}
+                          href={href}>
+                        {label}
+                    </Link>
+                ))}
             </ul>
+            <div>
+                {user ? (
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <img
+                                src={user.picture} // Uncomment to use user picture
+                                alt="User Profile"
+                                className="rounded-full w-9 h-9 cursor-pointer"
+                            />
+                        </PopoverTrigger>
+                        <PopoverContent className="w-40 mx-4 my-2 pl-3 bg-transparent border-transparent">
+                            <Button onClick={handleLogout}>
+                                Log Out
+                                <LiaDoorOpenSolid size={20} />
+                            </Button>
+                        </PopoverContent>
+                    </Popover>
+                ) : (
+                    <Button onClick={() => login()}>Sign In</Button> 
+                )}
+            </div>
         </nav>
-    )
+    );
 }
 
-export default NavBar  
+export default NavBar;
