@@ -87,6 +87,8 @@ const NavBar = () => {
                             <Image
                                 src={user.picture} // Uncomment to use user picture
                                 alt="User Profile"
+                                width={40}
+                                height={40}
                                 className="rounded-full w-9 h-9 cursor-pointer"
                             />
                         </PopoverTrigger>
