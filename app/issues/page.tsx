@@ -8,48 +8,52 @@ import IssueStatusButtons from '../status/IssueStatus';
 import { useToast } from "@/hooks/use-toast";
 import { collection, getDocs, deleteDoc, doc, updateDoc, query, where } from 'firebase/firestore';
 import { db } from '../service/FireBaseConfig';
-import { getAuth } from 'firebase/auth';
 
 const IssuesPage = () => {
   interface Issue {
-    id: string; // Change to string since Firestore IDs are usually strings
+    id: string;
     title: string;
     description: string;
     status: string;
-    userEmail: string; // Include userEmail in your Issue interface
+    userEmail: string;
   }
 
   const { toast } = useToast();
   const [issues, setIssues] = useState<Issue[]>([]);
-  const [loading, setLoading] = useState<boolean>(true); // Add loading state
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchIssues = async () => {
       try {
-        const auth = getAuth();
-        const user = auth.currentUser; // Get the current authenticated user
+        // Fetch user from localStorage
+        const userData = localStorage.getItem("user");
+        const user = userData ? JSON.parse(userData) : null;
 
-        // Check if the user is logged in
-        if (!user) {
-          setIssues([]); // If not logged in, set issues to empty
+        if (!user || !user.email) {
+          console.log('No user found in localStorage.');
+          setIssues([]); // No user, set issues to empty
           setLoading(false);
           return;
         }
 
-        const userEmail = user.email; // Get the user's email
-        const issuesQuery = query(collection(db, 'issues'), where("userEmail", "==", userEmail)); // Query to fetch issues for the logged-in user
+        const userEmail = user.email; // Get the user's email from localStorage
 
+        console.log('Fetching issues for user:', userEmail); // Log the email for debugging
+
+        // Query Firestore to fetch issues for this user
+        const issuesQuery = query(collection(db, 'issues'), where("userEmail", "==", userEmail));
         const querySnapshot = await getDocs(issuesQuery);
+
         const fetchedIssues: Issue[] = querySnapshot.docs.map(doc => ({
-          id: doc.id, // Use Firestore document ID
-          ...doc.data(), // Spread document data
+          id: doc.id,
+          ...doc.data(),
         })) as Issue[];
 
         setIssues(fetchedIssues);
       } catch (error) {
         console.error('Error fetching issues:', error);
       } finally {
-        setLoading(false); // Set loading to false after fetching
+        setLoading(false);
       }
     };
 
@@ -59,7 +63,7 @@ const IssuesPage = () => {
   const deleteIssue = async (id: string) => {
     setLoading(true);
     try {
-      await deleteDoc(doc(db, 'issues', id)); // Use Firestore delete method
+      await deleteDoc(doc(db, 'issues', id));
       setIssues(issues.filter((issue) => issue.id !== id)); // Remove the issue from the state after deletion
       toast({ description: 'Issue deleted successfully' });
     } catch (error) {
@@ -72,13 +76,12 @@ const IssuesPage = () => {
 
   const updateIssueStatus = async (id: string, status: 'OPEN' | 'IN_PROGRESS' | 'CLOSED') => {
     try {
-      const issueRef = doc(db, 'issues', id); // Reference to the issue document
-      await updateDoc(issueRef, { status }); // Update the status field in Firestore
+      const issueRef = doc(db, 'issues', id);
+      await updateDoc(issueRef, { status });
 
-      // Optionally update the state directly
-      setIssues(prevIssues => prevIssues.map(issue => 
-        issue.id === id ? { ...issue, status } : issue
-      ));
+      setIssues(prevIssues =>
+        prevIssues.map(issue => issue.id === id ? { ...issue, status } : issue)
+      );
 
       toast({ description: 'Issue status updated' });
     } catch (error) {
@@ -91,7 +94,7 @@ const IssuesPage = () => {
     <div className="container space-y-5 font-sans min-h-[100vh] bg-gray-100 px-4">
       <h1 className="text-2xl md:text-4xl font-bold mb-4 flex">My Issues <FaBugs /></h1>
 
-      {loading ? ( // Show spinner while loading
+      {loading ? (
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500"></div>
         </div>
@@ -111,7 +114,6 @@ const IssuesPage = () => {
                     onClick={() => deleteIssue(issue.id)}
                     className="text-red-500"
                   >
-                    {/* Show icon on small screens, text on larger screens */}
                     <span className="block sm:hidden">
                       <MdDeleteSweep color='black' />
                     </span>

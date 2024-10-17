@@ -77,7 +77,7 @@ const NewIssuePage = () => {
   
 
   return (
-    <div className="space-y-5 max-w-xl min-h-[100vh]">
+    <div className="space-y-5 max-w-xl min-h-[100vh] px-4">
       {error && (
         <Callout.Root>
           <Callout.Icon>

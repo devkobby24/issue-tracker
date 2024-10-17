@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -6,6 +7,9 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../service/FireBaseConfig';
+import { getAuth } from 'firebase/auth';
 
 // Register the necessary chart.js components
 ChartJS.register(ArcElement, Title, Tooltip, Legend);
@@ -15,11 +19,54 @@ interface StatusStatistics {
     count: number;
 }
 
-interface PieChartProps {
-    statusStatistics: StatusStatistics[];
-}
+const PieChart: React.FC = () => {
+    const [statusStatistics, setStatusStatistics] = useState<StatusStatistics[]>([]);
+    const [loading, setLoading] = useState<boolean>(true); // Loading state
 
-const PieChart: React.FC<PieChartProps> = ({ statusStatistics }) => {
+    useEffect(() => {
+        const fetchUserIssues = async () => {
+            setLoading(true); // Set loading state to true
+            try {
+                const auth = getAuth();
+                const user = auth.currentUser; // Get the current authenticated user
+
+                if (!user) {
+                    console.error('No user is currently logged in.');
+                    return; // Exit if no user is logged in
+                }
+
+                const userEmail = user.email; // Get user's email
+                const issuesQuery = query(collection(db, 'issues'), where("userEmail", "==", userEmail)); // Query to fetch user's issues
+
+                const querySnapshot = await getDocs(issuesQuery);
+                const statusCount: Record<string, number> = {};
+
+                // Aggregate counts by status
+                querySnapshot.forEach(doc => {
+                    const data = doc.data();
+                    const status = data.status; // Ensure you have a status field
+                    if (status) {
+                        statusCount[status] = (statusCount[status] || 0) + 1; // Increment count for each status
+                    }
+                });
+
+                // Convert the status count object to an array of StatusStatistics
+                const statisticsArray: StatusStatistics[] = Object.entries(statusCount).map(([status, count]) => ({
+                    status,
+                    count,
+                }));
+
+                setStatusStatistics(statisticsArray);
+            } catch (error) {
+                console.error('Error fetching user issues:', error);
+            } finally {
+                setLoading(false); // Set loading state to false after fetching
+            }
+        };
+
+        fetchUserIssues();
+    }, []);
+
     const labels = statusStatistics.map(stat => stat.status);
     const dataCounts = statusStatistics.map(stat => stat.count);
 
@@ -33,6 +80,8 @@ const PieChart: React.FC<PieChartProps> = ({ statusStatistics }) => {
                     'rgba(75, 192, 192, 0.5)',
                     'rgba(255, 99, 132, 0.5)',
                     'rgba(255, 206, 86, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 159, 64, 0.5)',
                 ],
                 borderColor: 'rgba(255, 255, 255, 1)',
                 borderWidth: 1,
@@ -43,9 +92,15 @@ const PieChart: React.FC<PieChartProps> = ({ statusStatistics }) => {
     return (
         <div className='flex flex-col p-4'>
             <h2 className="text-4xl font-bold mb-4">Issue Status Distribution</h2>
-            <div className="w-full items-center">
-                <Pie data={data} />
-            </div>
+            {loading ? (
+                <div className="flex justify-center items-center h-64">
+                    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500"></div>
+                </div>
+            ) : (
+                <div className="w-full items-center">
+                    <Pie data={data} />
+                </div>
+            )}
         </div>
     );
 };
