@@ -46,7 +46,7 @@ const NewIssuePage = () => {
   })
 
   return (
-    <div className="space-y-5 max-w-xl">
+    <div className="space-y-5 max-w-xl min-h-[100vh]">
       {error && (
         <Callout.Root>
           <Callout.Icon>
@@ -60,7 +60,7 @@ const NewIssuePage = () => {
         className="space-y-3"
         onSubmit={onSubmit}
       >
-        <TextField.Root placeholder="Create an Issue" {...register("title")} />
+        <TextField.Root placeholder="Issue Title" {...register("title")} />
         <ErrorMessage>{errors.title?.message} </ErrorMessage>
         <Controller
           name="description"

@@ -89,8 +89,8 @@ const IssuesPage = () => {
 
 
   return (
-    <div className="container mx-auto p-2 space-y-5 font-sans">
-      <h1 className="text-2xl font-bold mb-4 flex">My Issues <FaBugs /></h1>
+    <div className="container mx-auto p-2 space-y-5 font-sans min-h-[100vh]">
+      <h1 className="text-2xl md:text-4xl font-bold mb-4 flex">My Issues <FaBugs /></h1>
 
       {loading ? ( // Show spinner while loading
         <div className="flex justify-center items-center h-64">

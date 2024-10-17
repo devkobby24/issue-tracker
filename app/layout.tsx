@@ -7,6 +7,7 @@ import NavBar from './NavBar'
 import { Theme, ThemePanel } from "@radix-ui/themes";
 import Footer from "./components/Footer";
 import { Toaster } from "@/components/ui/toaster"
+import { GoogleOAuthProvider } from '@react-oauth/google'; 
 
 
 const inter = Inter({
@@ -25,8 +26,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} h-full`}>
-      <body className={`${inter.className} flex flex-col min-h-screen`}>
+    <html lang="en" className={`${inter.variable} `}>
+      <body className={`${inter.className} flex flex-col min-h-[100vh]`}>
+        <GoogleOAuthProvider clientId={process.env.NEXT_GOOGLE_AUTH_CLIENT_ID!}>
         <Theme accentColor="violet">
           <NavBar />
           <main className="flex-1 px-5">
@@ -36,6 +38,7 @@ export default function RootLayout({
           <Toaster />
           <Footer />
         </Theme>
+        </GoogleOAuthProvider>
       </body>
     </html>
   )
