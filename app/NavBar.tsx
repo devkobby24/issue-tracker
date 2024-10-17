@@ -10,8 +10,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { LiaDoorOpenSolid } from "react-icons/lia";
 import { Button } from "@/components/ui/button";
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
+import { useRouter } from "next/navigation";
 
 const NavBar = () => {
+    const router = useRouter();
     const [user, setUser] = useState<any>(null); // Specify type for user if using TypeScript
     const currentPath = usePathname();
 
@@ -54,14 +56,15 @@ const NavBar = () => {
         googleLogout();
         localStorage.removeItem("user");
         setUser(null); // Reset user state
+        router.push('/');
     };
 
     return (
-        <nav className='flex space-x-6 border-b mb-5 px-4 font-sans h-14 items-center justify-between'>
+        <nav className='flex border-b mb-5 px-2 font-sans h-14 items-center justify-between'>    
+            <ul className='flex space-x-2 md:space-x-6'>
             <Link href="/" aria-label="Home">
                 <AiFillBug size={25} />
             </Link>
-            <ul className='flex space-x-6'>
                 {links.map(({ href, label }) => (
                     <Link key={href} 
                           className={classNames({
@@ -92,7 +95,9 @@ const NavBar = () => {
                         </PopoverContent>
                     </Popover>
                 ) : (
-                    <Button onClick={() => login()}>Sign In</Button> 
+                    <div className=''>
+                    <Button onClick={() => login()}>Sign In</Button>
+                    </div> 
                 )}
             </div>
         </nav>

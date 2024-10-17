@@ -143,7 +143,7 @@ export default function Home() {
                 onClick={() => login()}
                 className="mt-5 w-full flex gap-4 items-center"
               >
-                <FcGoogle className="h-7 w-7" /> Sign In With Google
+                <FcGoogle className="h-7 w-7" /> Continue With Google
               </Button>
             </DialogDescription>
           </DialogHeader>
