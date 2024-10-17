@@ -1,9 +1,8 @@
 "use client";
-import { Button, Callout, Text, TextField } from "@radix-ui/themes";
+import { Button, Callout, TextField } from "@radix-ui/themes";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { useForm, Controller } from "react-hook-form";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -13,9 +12,16 @@ import { z } from "zod";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
 import { useToast } from "@/hooks/use-toast";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { db } from "../../service/FireBaseConfig";
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
+interface User {
+  name: string;
+  email: string;
+  user: string;
+}
 
 const NewIssuePage = () => {
   const { toast } = useToast();
@@ -29,21 +35,46 @@ const NewIssuePage = () => {
   } = useForm<IssueForm>({
     resolver: zodResolver(createIssueSchema),
   });
-  // console.log(register('title'));
+  
   const [error, setError] = useState("");
 
   const onSubmit = handleSubmit(async (data) => {
     try {
       setSubmitting(true);
-      await axios.post("/api/issues", data);
-      router.push("/issues");
-      toast({ description: 'Issue created successfully' });
+      const userData = localStorage.getItem("user"); // Get user data from localStorage
+      const user: User | null = userData ? JSON.parse(userData) : null; // Parse user data
+  
+      // Check if the user is logged in
+      if (!user) {
+        // Prompt user to log in or redirect to login page
+        toast({ description: 'You need to be logged in to submit an issue.' });
+        setSubmitting(false);
+        return; // Exit early if user is not authenticated
+      }
+  
+      // Use user's email or some unique identifier to create a unique document ID
+      const uniqueId = `${user.email.replace(/[@.]/g, "_")}_${Date.now()}`; // Replace special characters in email
+      // Note: Ensure that your user data is sanitized and does not contain special characters that might cause issues in Firestore
+  
+      // Use Firebase Firestore to save the issue
+      await setDoc(doc(collection(db, "issues"), uniqueId), {
+        ...data, // Spread the form data
+        userEmail: user.email, // Include the user's email
+        id: uniqueId, // Add the unique document ID
+      });
+  
+      router.push("/issues"); // Redirect to the issues page
+      toast({ description: 'Issue created successfully' }); // Show success message
     } catch (error) {
-      setSubmitting(false);
-      setError("An error occurred");
-      toast({ description: 'An error occurred' });
+      console.error("Error creating issue:", error); // Log the error
+      setError("An error occurred while creating the issue."); // Set error state
+      toast({ description: 'An error occurred while creating the issue.' }); // Show error message
+    } finally {
+      setSubmitting(false); // Ensure loading state is reset
     }
-  })
+  });
+  
+  
 
   return (
     <div className="space-y-5 max-w-xl min-h-[100vh]">
@@ -56,10 +87,7 @@ const NewIssuePage = () => {
         </Callout.Root>
       )}
 
-      <form
-        className="space-y-3"
-        onSubmit={onSubmit}
-      >
+      <form className="space-y-3" onSubmit={onSubmit}>
         <TextField.Root placeholder="Issue Title" {...register("title")} />
         <ErrorMessage>{errors.title?.message} </ErrorMessage>
         <Controller
@@ -71,7 +99,9 @@ const NewIssuePage = () => {
         />
         <ErrorMessage>{errors.description?.message} </ErrorMessage>
 
-        <Button disabled={isSubmitting} size='3'>{isSubmitting ? <Spinner /> : "Submit New Issue"}</Button>
+        <Button disabled={isSubmitting} size='3'>
+          {isSubmitting ? <Spinner /> : "Submit New Issue"}
+        </Button>
       </form>
     </div>
   );

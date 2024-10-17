@@ -27,11 +27,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} `}>
-      <body className={`${inter.className} flex flex-col min-h-[100vh]`}>
+      <body className={`${inter.className} min-h-[100vh]`}>
         <GoogleOAuthProvider clientId={process.env.NEXT_GOOGLE_AUTH_CLIENT_ID!}>
         <Theme accentColor="violet">
           <NavBar />
-          <main className="flex-1 px-5">
+          <main className="px-auto">
             {children}
             {/* <ThemePanel /> */}
           </main>

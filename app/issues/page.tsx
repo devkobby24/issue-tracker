@@ -5,15 +5,18 @@ import React, { useEffect, useState } from 'react';
 import { MdDeleteSweep } from "react-icons/md";
 import { FaBugs } from "react-icons/fa6";
 import IssueStatusButtons from '../status/IssueStatus';
-import { useToast } from "@/hooks/use-toast"
-
+import { useToast } from "@/hooks/use-toast";
+import { collection, getDocs, deleteDoc, doc, updateDoc, query, where } from 'firebase/firestore';
+import { db } from '../service/FireBaseConfig';
+import { getAuth } from 'firebase/auth';
 
 const IssuesPage = () => {
   interface Issue {
-    id: number;
+    id: string; // Change to string since Firestore IDs are usually strings
     title: string;
     description: string;
     status: string;
+    userEmail: string; // Include userEmail in your Issue interface
   }
 
   const { toast } = useToast();
@@ -23,9 +26,26 @@ const IssuesPage = () => {
   useEffect(() => {
     const fetchIssues = async () => {
       try {
-        const response = await fetch('/api/issues');
-        const data = await response.json();
-        setIssues(data);
+        const auth = getAuth();
+        const user = auth.currentUser; // Get the current authenticated user
+
+        // Check if the user is logged in
+        if (!user) {
+          setIssues([]); // If not logged in, set issues to empty
+          setLoading(false);
+          return;
+        }
+
+        const userEmail = user.email; // Get the user's email
+        const issuesQuery = query(collection(db, 'issues'), where("userEmail", "==", userEmail)); // Query to fetch issues for the logged-in user
+
+        const querySnapshot = await getDocs(issuesQuery);
+        const fetchedIssues: Issue[] = querySnapshot.docs.map(doc => ({
+          id: doc.id, // Use Firestore document ID
+          ...doc.data(), // Spread document data
+        })) as Issue[];
+
+        setIssues(fetchedIssues);
       } catch (error) {
         console.error('Error fetching issues:', error);
       } finally {
@@ -36,50 +56,30 @@ const IssuesPage = () => {
     fetchIssues();
   }, []);
 
-  const deleteIssue = async (id: number) => {
+  const deleteIssue = async (id: string) => {
     setLoading(true);
     try {
-      const response = await fetch('/api/issues/delete', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id }), // Send the issue ID in the body
-      });
-
-      if (response.ok) {
-        // Remove the issue from the state after deletion
-        setIssues(issues.filter((issue) => issue.id !== id));
-        toast({ description: 'Issue deleted successfully' });
-      } else {
-        toast({ description: 'Failed to delete the issue' });
-      }
+      await deleteDoc(doc(db, 'issues', id)); // Use Firestore delete method
+      setIssues(issues.filter((issue) => issue.id !== id)); // Remove the issue from the state after deletion
+      toast({ description: 'Issue deleted successfully' });
     } catch (error) {
       console.error('Error deleting issue:', error);
+      toast({ description: 'Failed to delete the issue' });
     } finally {
       setLoading(false);
     }
   };
 
-
-  const updateIssueStatus = async (id: number, status: 'OPEN' | 'IN_PROGRESS' | 'CLOSED') => {
+  const updateIssueStatus = async (id: string, status: 'OPEN' | 'IN_PROGRESS' | 'CLOSED') => {
     try {
-      const response = await fetch('/api/issues/update-status', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id, status }),
-      });
+      const issueRef = doc(db, 'issues', id); // Reference to the issue document
+      await updateDoc(issueRef, { status }); // Update the status field in Firestore
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to update issue status');
-      }
+      // Optionally update the state directly
+      setIssues(prevIssues => prevIssues.map(issue => 
+        issue.id === id ? { ...issue, status } : issue
+      ));
 
-      const data = await response.json();
-      window.location.reload();
-      console.log('Issue status updated:', data);
       toast({ description: 'Issue status updated' });
     } catch (error) {
       toast({ description: 'Failed to update issue status' });
@@ -87,9 +87,8 @@ const IssuesPage = () => {
     }
   };
 
-
   return (
-    <div className="container mx-auto p-2 space-y-5 font-sans min-h-[100vh]">
+    <div className="container space-y-5 font-sans min-h-[100vh] bg-gray-100 px-4">
       <h1 className="text-2xl md:text-4xl font-bold mb-4 flex">My Issues <FaBugs /></h1>
 
       {loading ? ( // Show spinner while loading
@@ -102,7 +101,7 @@ const IssuesPage = () => {
             issues.map((issue) => (
               <div
                 key={issue.id}
-                className="border border-gray-300 rounded-lg p-4 shadow transition-all hover:scale-105 duration-200 space-y-2"
+                className="border border-gray-300 rounded-lg p-4 shadow transition-all hover:scale-105 duration-200 space-y-2 bg-slate-100"
               >
                 <h2 className="text-lg font-semibold mb-2">{issue.title.toUpperCase()}</h2>
                 <p className="text-gray-500">{issue.description}</p>

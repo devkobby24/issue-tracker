@@ -136,7 +136,7 @@ export default function Home() {
         <DialogContent>
           <DialogHeader>
             <DialogDescription>
-              <img src="/logo.svg"/>
+              <img src="/bug-logo.png" className="rounded-full w-10 h-10"/>
               <h2 className="font-bold text-lg mt-7">Sign In To Continue</h2>
               <p>Sign in to the app with Google authentication</p>
               <Button

@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 const NavBar = () => {
     const router = useRouter();
     const [user, setUser] = useState<any>(null); // Specify type for user if using TypeScript
+    const [issues, setIssues] = useState<any[]>([]);
     const currentPath = usePathname();
 
     useEffect(() => {
@@ -56,6 +57,7 @@ const NavBar = () => {
         googleLogout();
         localStorage.removeItem("user");
         setUser(null); // Reset user state
+        setIssues([]);
         router.push('/');
     };
 
