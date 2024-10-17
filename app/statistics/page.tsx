@@ -1,8 +1,6 @@
 'use client';
 import BarChart from './../components/BarChart';
 import PieChart from '../components/PieChart';
-import IssuesTable from '../components/IssuesTable';
-import { dummyData, statusStatistics } from '../constants/options';
 
 const StatisticsPage = () => {
   return (
