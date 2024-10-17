@@ -33,7 +33,7 @@ function Footer() {
             <FaLinkedin size={24}  />
           </a>
           <a
-            href="https://wa.me/0547099317"
+            href="https://wa.me/233547099317"
             target="_blank"
             className="hover:text-gray-400 transition"
           >
