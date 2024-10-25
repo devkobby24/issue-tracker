@@ -91,8 +91,8 @@ const IssuesPage = () => {
   };
 
   return (
-    <div className="container space-y-5 font-sans min-h-[100vh] bg-gray-100 px-4 min-w-full">
-      <h1 className="text-2xl md:text-4xl font-bold mb-4 flex">My Issues <FaBugs /></h1>
+    <div className="container space-y-5 font-sans min-h-[100vh] px-4 min-w-full">
+      <h1 className="text-2xl md:text-4xl font-bold font-sans mb-4 items-center justify-center flex">My Issues <FaBugs /></h1>
 
       {loading ? (
         <div className="flex justify-center items-center h-64">
