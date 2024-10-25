@@ -73,11 +73,15 @@ const NavBar = () => {
         {links.map(({ href, label }) => (
           <Link
             key={href}
-            className={classNames( 'text-xl font-semibold md:p-2 rounded-md p-1',{
-              "text-zinc-900 border border-gray-300 shadow-md": currentPath === href,
-              "text-zinc-500": currentPath !== href,
-              "hover:text-zinc-900 transition-colors": true,
-            })}
+            className={classNames(
+              "text-xl font-semibold md:p-2 rounded-md p-1",
+              {
+                "text-zinc-900 border border-gray-300 shadow-md":
+                  currentPath === href,
+                "text-zinc-500": currentPath !== href,
+                "hover:text-zinc-900 transition-colors": true,
+              }
+            )}
             href={href}
           >
             {label}
