@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-      remotePatterns: ['lh3.googleusercontent.com'], // Add your domain here
+      domains: ['lh3.googleusercontent.com'], // Add your domain here
     },
     // Other Next.js config options can go here
   };
