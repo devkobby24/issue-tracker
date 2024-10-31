@@ -52,9 +52,9 @@ const NavBar = () => {
   });
 
   const links = [
-    { label: "Dashboard", href: "/" },
+    { label: "Home", href: "/" },
     { label: "Issues", href: "/issues" },
-    { label: "Statistics", href: "/statistics" },
+    { label: "Dashboard", href: "/statistics" },
   ];
 
   const handleLogout = () => {
