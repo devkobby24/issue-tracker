@@ -107,7 +107,7 @@ const IssuesPage = () => {
   };
 
   return (
-    <div className="container space-y-5 font-sans min-h-[100vh] px-4 min-w-full">
+    <div className="container space-y-5 font-sans min-h-[100vh] px-5 min-w-full">
       <h1 className="text-2xl md:text-4xl font-bold font-sans mb-4 items-center justify-center flex">
         My Issues <FaBugs />
       </h1>
