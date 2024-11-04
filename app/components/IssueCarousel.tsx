@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useEffect, useRef } from "react";
 
 interface Issue {
@@ -14,7 +14,7 @@ interface Issue {
 
 const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
     if (scrollRef.current) {
       const scrollWidth = scrollRef.current.scrollWidth;
