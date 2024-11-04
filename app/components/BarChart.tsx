@@ -109,7 +109,7 @@ const BarChart: React.FC<BarChartProps> = () => {
 
     return (
         <div className='p-4'>
-            <h2 className="text-4xl font-bold mb-4">Daily Issue Statistics</h2>
+            <h2 className="text-2xl md:text-4xl text-center font-bold mb-4">Daily Issue Statistics</h2>
             {loading ? (
                 <div className="flex justify-center items-center h-64">
                     <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500"></div>

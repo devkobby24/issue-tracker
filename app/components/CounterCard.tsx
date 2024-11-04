@@ -1,26 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Pie } from 'react-chartjs-2';
-import {
-    Chart as ChartJS,
-    ArcElement,
-    Title,
-    Tooltip,
-    Legend,
-} from 'chart.js';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../service/FireBaseConfig';
-
-// Register the necessary chart.js components
-ChartJS.register(ArcElement, Title, Tooltip, Legend);
 
 interface StatusStatistics {
     status: string;
     count: number;
 }
 
-const PieChart: React.FC = () => {
+const CounterCard: React.FC = () => {
     const [statusStatistics, setStatusStatistics] = useState<StatusStatistics[]>([]);
     const [loading, setLoading] = useState<boolean>(true); // Loading state
+    const [totalIssues, setTotalIssues] = useState<number>(0); // Total issues
 
     useEffect(() => {
         const fetchUserIssues = async () => {
@@ -40,15 +30,20 @@ const PieChart: React.FC = () => {
 
                 const querySnapshot = await getDocs(issuesQuery);
                 const statusCount: Record<string, number> = {};
+                let total = 0;
 
-                // Aggregate counts by status
+                // Aggregate counts by status and calculate total issues
                 querySnapshot.forEach(doc => {
+                    total++;
                     const data = doc.data();
                     const status = data.status; // Ensure you have a status field
                     if (status) {
                         statusCount[status] = (statusCount[status] || 0) + 1; // Increment count for each status
                     }
                 });
+
+                // Set total issues
+                setTotalIssues(total);
 
                 // Convert the status count object to an array of StatusStatistics
                 const statisticsArray: StatusStatistics[] = Object.entries(statusCount).map(([status, count]) => ({
@@ -67,42 +62,36 @@ const PieChart: React.FC = () => {
         fetchUserIssues();
     }, []);
 
-    const labels = statusStatistics.map(stat => stat.status);
-    const dataCounts = statusStatistics.map(stat => stat.count);
-
-    const data = {
-        labels: labels,
-        datasets: [
-            {
-                label: 'Issues by Status',
-                data: dataCounts,
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.5)',
-                    'rgba(255, 99, 132, 0.5)',
-                    'rgba(255, 206, 86, 0.5)',
-                    'rgba(54, 162, 235, 0.5)',
-                    'rgba(255, 159, 64, 0.5)',
-                ],
-                borderColor: 'rgba(255, 255, 255, 1)',
-                borderWidth: 1,
-            },
-        ],
-    };
-
     return (
-        <div className='flex flex-col p-4'>
-            <h2 className="text-2xl mb:text-4xl font-bold mb-4 text-center">Issue Status Distribution</h2>
+        <div className="flex flex-col p-4">
+            <h2 className="text-2xl mb:text-4xl font-bold mb-4">Issue Statistics By Count</h2>
             {loading ? (
                 <div className="flex justify-center items-center h-64">
                     <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500"></div>
                 </div>
             ) : (
-                <div className="w-full items-center">
-                    <Pie data={data} />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Card for total issues */}
+                    <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
+                        <h3 className="text-xl font-semibold">Total Issues</h3>
+                        <p className="text-7xl font-sans font-bold text-purple-600">{totalIssues}</p>
+                    </div>
+
+                    {/* Card for issues by status */}
+                    <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
+                        <h3 className="text-xl font-semibold pb-4">Issues by Status</h3>
+                        <ul className="text-center">
+                            {statusStatistics.map(stat => (
+                                <li key={stat.status} className="text-lg">
+                                    <span className="font-semibold font-sans list-item ">{stat.status}:</span> {stat.count}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
             )}
         </div>
     );
 };
 
-export default PieChart;
+export default CounterCard;
