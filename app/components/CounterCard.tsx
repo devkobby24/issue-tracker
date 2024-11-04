@@ -72,13 +72,13 @@ const CounterCard: React.FC = () => {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Card for total issues */}
-                    <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center justify-center hover:scale-105 transition-all">
+                    <div className="bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center justify-center hover:scale-105 transition-all">
                         <h3 className="text-xl font-semibold text-center">Total Issues</h3>
                         <p className="text-7xl font-sans font-bold text-center text-purple-600">{totalIssues}</p>
                     </div>
 
                     {/* Card for issues by status */}
-                    <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center justify-center hover:scale-105 transition-all">
+                    <div className="bg-white p-6 rounded-2xl shadow-lg flex flex-col items-center justify-center hover:scale-105 transition-all">
                         <h3 className="text-xl font-semibold pb-4">Issues by Status</h3>
                         <ul className="text-center">
                             {statusStatistics.map(stat => (

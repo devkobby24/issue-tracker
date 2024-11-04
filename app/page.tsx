@@ -13,19 +13,125 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import IssuesCarousel from "./components/IssueCarousel";
 
 export default function Home() {
   const router = useRouter();
   const [openDialog, setOpenDialog] = useState(false);
 
   const issues = [
-    { id: 1, title: "Fix login bug", description: "Users are unable to login with Google OAuth.", status: "Open", assignee: "John Doe" },
-    { id: 2, title: "Update dashboard UI", description: "Redesign the dashboard with the new layout.", status: "In Progress", assignee: "Jane Smith" },
-    { id: 3, title: "Implement notifications", description: "Add email notifications for new issues.", status: "Closed", assignee: "Alice Johnson" },
-    { id: 4, title: "Optimize database queries", description: "Improve the performance of slow SQL queries.", status: "Open", assignee: "Bob Williams" },
-    { id: 5, title: "Fix broken links", description: "Update all broken links across the website.", status: "In Progress", assignee: "Eva Brown" },
-    { id: 6, title: "Add dark mode", description: "Implement dark mode theme across the application.", status: "Open", assignee: "Charlie Green" },
-  ];
+    {
+        id: 1,
+        title: "Fix login bug",
+        description: "Users are unable to login with Google OAuth.",
+        status: "Open",
+        assignee: "John Doe",
+        priority: "High",
+        createdDate: "2024-10-15",
+        dueDate: "2024-10-30",
+        tags: ["bug", "authentication"],
+    },
+    {
+        id: 2,
+        title: "Update dashboard UI",
+        description: "Redesign the dashboard with the new layout.",
+        status: "In Progress",
+        assignee: "Jane Smith",
+        priority: "Medium",
+        createdDate: "2024-10-10",
+        dueDate: "2024-11-05",
+        tags: ["UI", "design"],
+    },
+    {
+        id: 3,
+        title: "Implement notifications",
+        description: "Add email notifications for new issues.",
+        status: "Closed",
+        assignee: "Alice Johnson",
+        priority: "Low",
+        createdDate: "2024-09-25",
+        dueDate: "2024-10-20",
+        tags: ["feature", "notifications"],
+    },
+    {
+        id: 4,
+        title: "Optimize database queries",
+        description: "Improve the performance of slow SQL queries.",
+        status: "Open",
+        assignee: "Bob Williams",
+        priority: "High",
+        createdDate: "2024-10-12",
+        dueDate: "2024-11-01",
+        tags: ["performance", "database"],
+    },
+    {
+        id: 5,
+        title: "Fix broken links",
+        description: "Update all broken links across the website.",
+        status: "In Progress",
+        assignee: "Eva Brown",
+        priority: "Medium",
+        createdDate: "2024-10-14",
+        dueDate: "2024-11-10",
+        tags: ["bug", "maintenance"],
+    },
+    {
+        id: 6,
+        title: "Add dark mode",
+        description: "Implement dark mode theme across the application.",
+        status: "Open",
+        assignee: "Charlie Green",
+        priority: "Low",
+        createdDate: "2024-10-05",
+        dueDate: "2024-11-15",
+        tags: ["feature", "UI"],
+    },
+    {
+        id: 7,
+        title: "Create user documentation",
+        description: "Develop comprehensive documentation for end users.",
+        status: "Open",
+        assignee: "David Black",
+        priority: "Medium",
+        createdDate: "2024-10-20",
+        dueDate: "2024-11-25",
+        tags: ["documentation", "user"],
+    },
+    {
+        id: 8,
+        title: "Set up CI/CD pipeline",
+        description: "Automate deployment process using CI/CD.",
+        status: "In Progress",
+        assignee: "Eve White",
+        priority: "High",
+        createdDate: "2024-10-18",
+        dueDate: "2024-11-05",
+        tags: ["devops", "automation"],
+    },
+    {
+        id: 9,
+        title: "Conduct user testing",
+        description: "Gather feedback from users after implementing new features.",
+        status: "Open",
+        assignee: "Frank Gray",
+        priority: "Low",
+        createdDate: "2024-10-22",
+        dueDate: "2024-11-30",
+        tags: ["testing", "feedback"],
+    },
+    {
+        id: 10,
+        title: "Review security protocols",
+        description: "Assess and update security measures in the application.",
+        status: "Open",
+        assignee: "Grace Silver",
+        priority: "High",
+        createdDate: "2024-10-25",
+        dueDate: "2024-11-15",
+        tags: ["security", "review"],
+    },
+];
+
 
   const GetUserProfile = (tokenInfo: Omit<TokenResponse, "error" | "error_description" | "error_uri">) => {
     axios
@@ -60,7 +166,7 @@ export default function Home() {
   };
 
   return (
-    <div className="p-4 space-y-6 flex flex-col items-center">
+    <div className="p-4 space-y-6 flex flex-col items-center min-h-[90vh]">
       <h1 className="text-4xl font-bold mb-6 text-gray-600 text-center">Issue Tracker</h1>
       <p className="text-lg text-gray-500 mb-4 text-center">
         Track and manage issues easily with our intuitive interface. Assign tasks, monitor progress, and streamline your workflow!
@@ -69,20 +175,8 @@ export default function Home() {
         Get Started!
       </Button>
 
-      {/* Issues List */}
-      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-4xl">
-        <h2 className="text-xl font-semibold mb-4">Recent Issues</h2>
-        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {issues.map((issue) => (
-            <li key={issue.id} className="border p-4 rounded-lg shadow-sm">
-              <h3 className="text-lg font-semibold mb-2">{issue.title}</h3>
-              <p><strong>Description:</strong> {issue.description}</p>
-              <p><strong>Status:</strong> {issue.status}</p>
-              <p><strong>Assignee:</strong> {issue.assignee}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {/* Issues Carousel */}
+      <IssuesCarousel issues={issues}/>
 
       {/* Google login dialog */}
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>

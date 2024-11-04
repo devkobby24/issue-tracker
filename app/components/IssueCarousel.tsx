@@ -7,6 +7,9 @@ interface Issue {
   description: string;
   status: string;
   assignee: string;
+    priority: string;
+    tags: string[];
+    createdDate: string;
 }
 
 const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
@@ -32,7 +35,7 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
         Recent Issues By Users
       </h2>
       <div
-        className="flex flex-row animate-scroll items-center justify-center"
+        className="animate-scroll items-center justify-center"
         ref={scrollRef}
       >
         {issues.map((issue) => (
@@ -40,7 +43,7 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
             key={issue.id}
             className="border p-4 rounded-lg shadow-sm flex-shrink-0 mr-4 space-y-2"
           >
-            <h3 className="text-xl font-semibold mb-2">{issue.title}</h3>
+            <h3 className="text-xl font-semibold mb-2 text-center">{issue.title.toUpperCase()}</h3>
             <p className="text-lg font-sans mb-2">
               <strong>🔠 Description:</strong> {issue.description}
             </p>
@@ -49,6 +52,41 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
             </p>
             <p className="text-lg font-sans mb-2">
               <strong>👨🏾‍💻 Assignee:</strong> {issue.assignee}
+            </p>
+            <p className="text-lg font-sans mb-2">
+              <strong>🔼 Priority:</strong> {issue.priority}
+            </p>
+            <p className="text-lg font-sans mb-2">
+              <strong>🏷️ Tag:</strong> {issue.tags.map((tag) => `#${tag}`).join(", ")}
+            </p>
+            <p className="text-lg font-sans mb-2">
+              <strong>📅 Date Created:</strong> {issue.createdDate}
+            </p>
+          </div>
+        ))}
+         {issues.map((issue) => (
+          <div
+            key={issue.id}
+            className="border p-4 rounded-lg shadow-sm flex-shrink-0 mr-4 space-y-2"
+          >
+            <h3 className="text-xl font-semibold mb-2 text-center">{issue.title.toUpperCase()}</h3>
+            <p className="text-lg font-sans mb-2">
+              <strong>🔠 Description:</strong> {issue.description}
+            </p>
+            <p className="text-lg font-sans mb-2">
+              <strong>✅ Status:</strong> {issue.status}
+            </p>
+            <p className="text-lg font-sans mb-2">
+              <strong>👨🏾‍💻 Assignee:</strong> {issue.assignee}
+            </p>
+            <p className="text-lg font-sans mb-2">
+              <strong>🔼 Priority:</strong> {issue.priority}
+            </p>
+            <p className="text-lg font-sans mb-2">
+              <strong>🏷️ Tag:</strong> {issue.tags.map((tag) => `#${tag}`).join(", ")}
+            </p>
+            <p className="text-lg font-sans mb-2">
+              <strong>📅 Date Created:</strong> {issue.createdDate}
             </p>
           </div>
         ))}
@@ -64,7 +102,7 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
             transform: translateX(0);
           }
           100% {
-            transform: translateX(calc(-1 * var(--scroll-width)));
+            transform: translateX(calc(-1 * var(--scroll-width) / 2));
           }
         }
       `}</style>
