@@ -14,6 +14,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import IssuesCarousel from "./components/IssueCarousel";
+import ImageComponent from "./components/ImageComponent";
 
 export default function Home() {
   const router = useRouter();
@@ -177,6 +178,9 @@ export default function Home() {
 
       {/* Issues Carousel */}
       <IssuesCarousel issues={issues}/>
+
+      {/* Image Component */}
+      <ImageComponent />
 
       {/* Google login dialog */}
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>

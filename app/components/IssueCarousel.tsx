@@ -1,4 +1,4 @@
-import Image from "next/image";
+'use client';
 import React, { useEffect, useRef } from "react";
 
 interface Issue {
@@ -14,10 +14,7 @@ interface Issue {
 
 const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const images = ["/12.png", "/123.png", "/1234.png", "/12345.png"];
-  const randomImage = images[Math.floor(Math.random() * images.length)];
   
-
   useEffect(() => {
     if (scrollRef.current) {
       const scrollWidth = scrollRef.current.scrollWidth;
@@ -32,7 +29,7 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
   }, [issues]);
 
   return (
-    <div className="bg-white shadow-md rounded-sm p-6 w-full overflow-hidden">
+    <div className="bg-white rounded-sm p-6 w-full overflow-hidden">
       <h2 className="font-sans text-4xl font-bold mb-6 text-gray-600 text-center">
         Recent Issues By Users
       </h2>
@@ -114,46 +111,6 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
           }
         }
       `}</style>
-
-      {/* <div className="relative w-full h-80 rounded-md flex justify-center items-center">
-        <div className="relative flex gap-4 flex-row">
-          {["/12.png", "/123.png", "/1234.png", "/12345.png"].map((src, index) => (
-          <Image
-            key={index}
-            src={src}
-            alt={`Image ${index + 1}`}
-            className="rounded-md object-cover h-full w-full"
-            width={300}
-            height={300}
-          />
-          ))}
-        </div>
-      </div> */}
-
-    <div className="relative w-full h-80 rounded-md flex justify-center items-center">
-      <div className="relative grid gap-4 grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-        {/* Mobile: Show one random image */}
-        <Image
-          src={randomImage}
-          alt="Random Image"
-          className="rounded-md object-cover w-full h-full sm:hidden"
-          width={300}
-          height={300}
-        />
-
-        {/* Tablet and larger: Display images based on screen size */}
-        {images.map((src, index) => (
-          <Image
-            key={index}
-            src={src}
-            alt={`Image ${index + 1}`}
-            className="rounded-md object-cover w-full h-full hidden sm:block overflow-hidden"
-            width={300}
-            height={300}
-          />
-        ))}
-      </div>
-    </div>
     </div>
   );
 };
