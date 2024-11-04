@@ -34,7 +34,7 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
         Recent Issues By Users
       </h2>
       <div
-        className="animate-scroll items-center justify-center md:mb-32 lg:mb-6"
+        className="animate-scroll items-center justify-center md:mb-4"
         ref={scrollRef}
       >
         {issues.map((issue) => (
@@ -42,26 +42,26 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
             key={issue.id}
             className="border p-4 rounded-lg shadow-sm flex-shrink-0 mr-4 space-y-2"
           >
-            <h3 className="text-xl font-semibold mb-2 text-center">
+            <h3 className="text-lg md:text-xl font-semibold mb-2 text-center">
               {issue.title.toUpperCase()}
             </h3>
-            <p className="text-lg font-sans mb-2">
+            <p className="md:text-lg text-sm font-sans mb-2">
               <strong>🔠 Description:</strong> {issue.description}
             </p>
-            <p className="text-lg font-sans mb-2">
+            <p className="md:text-lg text-sm font-sans mb-2">
               <strong>✅ Status:</strong> {issue.status}
             </p>
-            <p className="text-lg font-sans mb-2">
+            <p className="md:text-lg text-sm font-sans mb-2">
               <strong>👨🏾‍💻 Assignee:</strong> {issue.assignee}
             </p>
-            <p className="text-lg font-sans mb-2">
+            <p className="md:text-lg text-sm font-sans mb-2">
               <strong>🔼 Priority:</strong> {issue.priority}
             </p>
-            <p className="text-lg font-sans mb-2">
+            <p className="md:text-lg text-sm font-sans mb-2">
               <strong>🏷️ Tag:</strong>{" "}
               {issue.tags.map((tag) => `#${tag}`).join(", ")}
             </p>
-            <p className="text-lg font-sans mb-2">
+            <p className="md:text-lg text-sm font-sans mb-2">
               <strong>📅 Date Created:</strong> {issue.createdDate}
             </p>
           </div>
@@ -69,28 +69,28 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
         {issues.map((issue) => (
           <div
             key={issue.id}
-            className="border p-4 rounded-lg shadow-sm flex-shrink-0 mr-4 space-y-2"
+            className="border p-4 rounded-lg shadow-sm flex-shrink-0 mr-4 space-y-1"
           >
-            <h3 className="text-xl font-semibold mb-2 text-center">
+            <h3 className="text-lg md:text-xl font-semibold mb-2 text-center">
               {issue.title.toUpperCase()}
             </h3>
-            <p className="text-lg font-sans mb-2">
+            <p className="md:text-lg text-sm font-sans mb-2">
               <strong>🔠 Description:</strong> {issue.description}
             </p>
-            <p className="text-lg font-sans mb-2">
+            <p className="md:text-lg text-sm font-sans mb-2">
               <strong>✅ Status:</strong> {issue.status}
             </p>
-            <p className="text-lg font-sans mb-2">
+            <p className="md:text-lg text-sm font-sans mb-2">
               <strong>👨🏾‍💻 Assignee:</strong> {issue.assignee}
             </p>
-            <p className="text-lg font-sans mb-2">
+            <p className="md:text-lg text-sm font-sans mb-2">
               <strong>🔼 Priority:</strong> {issue.priority}
             </p>
-            <p className="text-lg font-sans mb-2">
+            <p className="md:text-lg text-sm font-sans mb-2">
               <strong>🏷️ Tag:</strong>{" "}
               {issue.tags.map((tag) => `#${tag}`).join(", ")}
             </p>
-            <p className="text-lg font-sans mb-2">
+            <p className="md:text-lg text-sm font-sans mb-2">
               <strong>📅 Date Created:</strong> {issue.createdDate}
             </p>
           </div>
