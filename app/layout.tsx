@@ -3,7 +3,7 @@ import './globals.css'
 import './theme-config.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import NavBar from './NavBar'
+import NavBar from './components/ui/NavBar'
 import { Theme, ThemePanel } from "@radix-ui/themes";
 import Footer from "./components/ui/Footer";
 import { Toaster } from "@/components/ui/toaster"

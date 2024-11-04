@@ -65,7 +65,7 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="flex mb-5 px-2 font-sans h-14 items-center justify-between shadow-md">
+    <nav className="flex px-2 font-sans h-14 items-center justify-between shadow-md">
       <ul className="flex space-x-2 justify-center items-center">
         <Link href="/" aria-label="Home">
           <AiFillBug size={25} />

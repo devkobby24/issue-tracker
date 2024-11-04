@@ -90,14 +90,14 @@ const PieChart: React.FC = () => {
     };
 
     return (
-        <div className='flex flex-col p-4'>
-            <h2 className="text-2xl mb:text-4xl font-bold mb-4 text-center">Issue Status Distribution</h2>
+        <div className='flex flex-col p-4 items-center justify-center'>
+            <h2 className="text-2xl md:text-4xl font-bold mb-4 text-center">Issue Status Distribution</h2>
             {loading ? (
                 <div className="flex justify-center items-center h-64">
                     <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500"></div>
                 </div>
             ) : (
-                <div className="w-full items-center">
+                <div className="w-full items-center justify-center">
                     <Pie data={data} />
                 </div>
             )}

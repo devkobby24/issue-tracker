@@ -64,7 +64,7 @@ const CounterCard: React.FC = () => {
 
     return (
         <div className="flex flex-col p-4">
-            <h2 className="text-2xl mb:text-4xl font-bold mb-4">Issue Statistics By Count</h2>
+            <h2 className="text-2xl md:text-4xl text-center font-bold mb-4">Issue Statistics By Count</h2>
             {loading ? (
                 <div className="flex justify-center items-center h-64">
                     <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500"></div>
@@ -72,13 +72,13 @@ const CounterCard: React.FC = () => {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Card for total issues */}
-                    <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
-                        <h3 className="text-xl font-semibold">Total Issues</h3>
-                        <p className="text-7xl font-sans font-bold text-purple-600">{totalIssues}</p>
+                    <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center justify-center hover:scale-105 transition-all">
+                        <h3 className="text-xl font-semibold text-center">Total Issues</h3>
+                        <p className="text-7xl font-sans font-bold text-center text-purple-600">{totalIssues}</p>
                     </div>
 
                     {/* Card for issues by status */}
-                    <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
+                    <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center justify-center hover:scale-105 transition-all">
                         <h3 className="text-xl font-semibold pb-4">Issues by Status</h3>
                         <ul className="text-center">
                             {statusStatistics.map(stat => (

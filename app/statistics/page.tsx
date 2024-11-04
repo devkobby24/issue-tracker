@@ -5,7 +5,7 @@ import CounterCard from '../components/CounterCard';
 
 const StatisticsPage = () => {
   return (
-    <div className="space-y-8 flex flex-col items-center w-full min-h-[100vh]">
+    <div className="space-y-8 flex flex-col lg:flex-row lg:space-x-8 justify-center items-center w-full min-h-[100vh]">
       <CounterCard />
       <BarChart />
       <PieChart />
