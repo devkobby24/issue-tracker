@@ -30,7 +30,7 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
 
   return (
     <div className="bg-white rounded-sm p-6 w-full overflow-hidden">
-      <h2 className="font-sans text-4xl font-bold mb-6 text-gray-600 text-center">
+      <h2 className="font-sans text-2xl md:text-4xl font-bold mb-6 text-gray-600 text-center">
         Recent Issues By Users
       </h2>
       <div
