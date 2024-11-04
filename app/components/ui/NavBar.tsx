@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { AiFillBug } from "react-icons/ai";
-import classNames from "classnames"; // Use camelCase for consistency
+import classNames from "classnames";
 import axios from "axios";
 import {
   Popover,
@@ -22,11 +22,25 @@ const NavBar = () => {
   const [user, setUser] = useState<any>(null);
   const currentPath = usePathname();
 
+  // Fetch user from localStorage initially
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+
+    // Listen for changes in localStorage (e.g., in case user logs in from another tab)
+    const handleStorageChange = () => {
+      const updatedUser = localStorage.getItem("user");
+      setUser(updatedUser ? JSON.parse(updatedUser) : null);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    // Cleanup on component unmount
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
   // Handle Google Login
@@ -60,12 +74,12 @@ const NavBar = () => {
   const handleLogout = () => {
     googleLogout();
     localStorage.removeItem("user");
-    setUser(null); // Reset user state
+    setUser(null);
     router.push("/");
   };
 
   return (
-    <nav className="flex px-2 font-sans h-14 items-center justify-between shadow-md">
+    <nav className="flex px-2 md:px-4 font-sans h-14 items-center justify-between shadow-md">
       <ul className="flex space-x-2 justify-center items-center">
         <Link href="/" aria-label="Home">
           <AiFillBug size={25} />
@@ -74,7 +88,7 @@ const NavBar = () => {
           <Link
             key={href}
             className={classNames(
-              "text-xl font-semibold md:p-2 rounded-md p-1",
+              "md:text-xl text-sm font-semibold md:p-2 rounded-md p-1",
               {
                 "text-zinc-900 border border-gray-300 shadow-md":
                   currentPath === href,
@@ -93,7 +107,7 @@ const NavBar = () => {
           <Popover>
             <PopoverTrigger asChild>
               <Image
-                src={user.picture} // Uncomment to use user picture
+                src={user.picture}
                 alt="User Profile"
                 width={40}
                 height={40}
@@ -108,8 +122,10 @@ const NavBar = () => {
             </PopoverContent>
           </Popover>
         ) : (
-          <div className="">
-            <Button onClick={() => login()}>Sign In</Button>
+          <div>
+            <Button size='sm' onClick={() => login()}>
+              Sign In
+            </Button>
           </div>
         )}
       </div>

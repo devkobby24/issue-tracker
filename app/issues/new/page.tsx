@@ -94,17 +94,22 @@ const NewIssuePage = () => {
 
       <form className="space-y-3" onSubmit={onSubmit}>
         <TextField.Root placeholder="Issue Title" {...register("title")} />
-        <ErrorMessage>{errors.title?.message}</ErrorMessage>
+        {errors.title && <span>{errors.title.message}</span>}
+
         <Controller
           name="description"
           control={control}
-          render={({ field }) => (
-            <SimpleMDE placeholder="Description" {...field} />
+          render={({ field: { onChange, value } }) => (
+            <SimpleMDE
+              value={value || ""}
+              onChange={onChange}
+              placeholder="Description"
+            />
           )}
         />
-        <ErrorMessage>{errors.description?.message}</ErrorMessage>
+        {errors.description && <span>{errors.description.message}</span>}
 
-        <Button disabled={isSubmitting} size="3">
+        <Button type="submit" disabled={isSubmitting} size="3">
           {isSubmitting ? <Spinner /> : "Submit New Issue"}
         </Button>
       </form>

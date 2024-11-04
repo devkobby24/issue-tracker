@@ -166,7 +166,7 @@ export default function Home() {
   };
 
   return (
-    <div className="p-4 space-y-6 flex flex-col items-center min-h-[90vh]">
+    <div className="p-4 space-y-6 flex flex-col items-center min-h-[90vh] w-full">
       <h1 className="text-4xl font-bold mb-6 text-gray-600 text-center">Issue Tracker</h1>
       <p className="text-lg text-gray-500 mb-4 text-center">
         Track and manage issues easily with our intuitive interface. Assign tasks, monitor progress, and streamline your workflow!
