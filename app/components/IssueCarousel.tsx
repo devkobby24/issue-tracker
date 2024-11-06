@@ -30,23 +30,28 @@ interface Issue {
 }
 
 const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
-  const autoplayPlugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
+  const autoplayPlugin = useRef(
+    Autoplay({ delay: 2000, stopOnInteraction: true })
+  );
 
   return (
-    <div className="bg-white rounded-sm p-6 w-full overflow-hidden items-center justify-center">
+    <div className="bg-white rounded-sm px-6 w-full overflow-hidden items-center justify-center">
       <h2 className="font-sans text-2xl md:text-4xl font-bold mb-6 text-gray-600 text-center">
         Recent Issues By Users
       </h2>
-      
+
       <Carousel
         plugins={[autoplayPlugin.current]}
         className="items-center justify-center max-w-xs mx-auto"
         onMouseEnter={autoplayPlugin.current.stop}
         onMouseLeave={autoplayPlugin.current.reset}
       >
-        <CarouselContent className="items-center jus`">
+        <CarouselContent>
           {issues.map((issue) => (
-            <CarouselItem key={issue.id} className="p-2 items-center justify-center">
+            <CarouselItem
+              key={issue.id}
+              className="p-2 items-center justify-center"
+            >
               <Card className="h-full p-2 w-full items-center justify-center">
                 <CardHeader>
                   <CardTitle className="text-lg font-sans font-bold text-center">
@@ -55,24 +60,25 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
                 </CardHeader>
                 <CardContent className=" items-center justify-center p-6">
                   <span className="space-y-2">
-                  <p className="md:text-lg text-sm font-sans">
-                    <strong>🔠 Description:</strong> {issue.description}
-                  </p>
-                  <p className="md:text-lg text-sm font-sans">
-                    <strong>✅ Status:</strong> {issue.status}
-                  </p>
-                  <p className="md:text-lg text-sm font-sans">
-                    <strong>👨🏾‍💻 Assignee:</strong> {issue.assignee}
-                  </p>
-                  <p className="md:text-lg text-sm font-sans">
-                    <strong>🔼 Priority:</strong> {issue.priority}
-                  </p>
-                  <p className="md:text-lg text-sm font-sans">
-                    <strong>🏷️ Tags:</strong> {issue.tags.map((tag) => `#${tag}`).join(", ")}
-                  </p>
-                  <p className="md:text-lg text-sm font-sans">
-                    <strong>📅 Date Created:</strong> {issue.createdDate}
-                  </p>
+                    <p className="md:text-md text-sm font-sans">
+                      <strong>🔠 Description:</strong> {issue.description}
+                    </p>
+                    <p className="md:text-md text-sm font-sans">
+                      <strong>✅ Status:</strong> {issue.status}
+                    </p>
+                    <p className="md:text-md text-sm font-sans">
+                      <strong>👨🏾‍💻 Assignee:</strong> {issue.assignee}
+                    </p>
+                    <p className="md:text-md text-sm font-sans">
+                      <strong>🔼 Priority:</strong> {issue.priority}
+                    </p>
+                    <p className="md:text-md text-sm font-sans">
+                      <strong>🏷️ Tags:</strong>{" "}
+                      {issue.tags.map((tag) => `#${tag}`).join(", ")}
+                    </p>
+                    <p className="md:text-md text-sm font-sans">
+                      <strong>📅 Date Created:</strong> {issue.createdDate}
+                    </p>
                   </span>
                 </CardContent>
                 <CardFooter className="flex justify-center text-sm">
@@ -84,7 +90,7 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        
+
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>

@@ -60,15 +60,13 @@ const FeaturesSection = () => {
       <div className="flex flex-col items-center space-y-2 p-4 rounded-lg">
         {icon}
         <h3 className="text-xl font-bold">{title}</h3>
-        <p className="text-sm text-gray-500 text-center">
-          {description}
-        </p>
+        <p className="text-sm text-gray-500 text-center">{description}</p>
       </div>
     );
   };
 
   return (
-    <section className="w-full py-12 md:py-24 flex items-center justify-center">
+    <section className="w-full py-6 md:py-12 flex items-center justify-center">
       <div className="container px-4 md:px-6 text-center">
         <h2 className="text-3xl font-bold tracking-tighter md:text-5xl text-center mb-8">
           Key Features

@@ -7,7 +7,7 @@ import LineChartComponent from "../components/LineChart";
 
 const StatisticsPage = () => {
   return (
-    <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 items-center justify-center">
+    <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 items-center justify-center lg:ml-80">
       <CounterCard />
       <PieChartComponent />
       <BarChart />

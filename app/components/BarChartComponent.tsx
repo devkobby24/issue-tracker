@@ -38,12 +38,14 @@ const BarChartComponent: React.FC = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        if (!user || !user.primaryEmailAddress) {
-          console.error("No user found in localStorage. Barchart will not render.");
+        if (!user) {
+          console.log(
+            "No user found in localStorage. Barchart will not render."
+          );
           return;
         }
 
-        const userEmail = user.primaryEmailAddress.emailAddress; // Use primaryEmailAddress
+        const userEmail = user.primaryEmailAddress?.emailAddress; // Use primaryEmailAddress
         const issuesQuery = query(
           collection(db, "issues"),
           where("userEmail", "==", userEmail) // Fetch based on primary email address
@@ -78,7 +80,7 @@ const BarChartComponent: React.FC = () => {
     };
 
     fetchData();
-  }, []);
+  }, [user]);
 
   return (
     <div className="flex-col items-center justify-center sm:w-auto md:max-w-[400px]">
@@ -87,17 +89,19 @@ const BarChartComponent: React.FC = () => {
           <CardTitle>Issue Statistics</CardTitle>
           <CardDescription>Monthly Issue Counts</CardDescription>
         </CardHeader>
-        <CardContent className="p-0"> {/* Remove padding */}
+        <CardContent className="p-0">
+          {" "}
+          {/* Remove padding */}
           {loading ? (
             <div className="flex justify-center items-center h-64">
               <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500"></div>
             </div>
           ) : (
             <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={chartData} barSize={50} margin={{right:30}}>
+              <BarChart data={chartData} barSize={50} margin={{ right: 30 }}>
                 <CartesianGrid />
                 <XAxis dataKey="month" tickLine={false} tickMargin={10} />
-                <YAxis width={30}/>
+                <YAxis width={30} />
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="count" fill="#000234" radius={[10, 10, 0, 0]} />

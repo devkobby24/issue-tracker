@@ -14,6 +14,7 @@ import Spinner from "@/app/components/Spinner";
 import { useToast } from "@/hooks/use-toast";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { db } from "../../service/FireBaseConfig";
+import { useUser } from "@clerk/nextjs";
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
@@ -31,6 +32,7 @@ const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
 
 const NewIssuePage = () => {
   const { toast } = useToast();
+  const { user } = useUser();
   const router = useRouter();
   const [isSubmitting, setSubmitting] = useState(false);
   const {
@@ -52,8 +54,8 @@ const NewIssuePage = () => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setSubmitting(true);
-      const userData = localStorage.getItem("user"); // Get user data from localStorage
-      const user: User | null = userData ? JSON.parse(userData) : null; // Parse user data
+      // const userData = localStorage.getItem("user"); // Get user data from localStorage
+      // const user: User | null = userData ? JSON.parse(userData) : null; // Parse user data
 
       // Check if the user is logged in
       if (!user) {
@@ -64,13 +66,13 @@ const NewIssuePage = () => {
       }
 
       // Use user's email or some unique identifier to create a unique document ID
-      const uniqueId = `${user.email.replace(/[@.]/g, "_")}_${Date.now()}`; // Replace special characters in email
+      const uniqueId = `${user.primaryEmailAddress?.emailAddress.replace(/[@.]/g, "_")}_${Date.now()}`; // Replace special characters in email
       // Note: Ensure that your user data is sanitized and does not contain special characters that might cause issues in Firestore
 
       // Use Firebase Firestore to save the issue
       await setDoc(doc(collection(db, "issues"), uniqueId), {
         ...data, // Spread the form data
-        userEmail: user.email, // Include the user's email
+        userEmail: user.primaryEmailAddress?.emailAddress, // Include the user's email
         id: uniqueId, // Add the unique document ID
         createdAt: Date.now(), // Include the current timestamp
       });
