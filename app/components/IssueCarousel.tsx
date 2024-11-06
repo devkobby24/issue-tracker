@@ -1,5 +1,22 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+
+import React, { useRef } from "react";
+import Autoplay from "embla-carousel-autoplay";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+} from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 interface Issue {
   id: number;
@@ -13,83 +30,64 @@ interface Issue {
 }
 
 const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [isAnimationReady, setAnimationReady] = useState(false);
-
-  useEffect(() => {
-    const updateScrollWidth = () => {
-      if (scrollRef.current) {
-        const scrollWidth = scrollRef.current.scrollWidth;
-        const animationDuration = scrollWidth / 70;
-
-        scrollRef.current.style.setProperty("--scroll-width", `${scrollWidth}px`);
-        scrollRef.current.style.setProperty("--animation-duration", `${animationDuration}s`);
-        setAnimationReady(true);
-      }
-    };
-
-    updateScrollWidth();
-    window.addEventListener("resize", updateScrollWidth);
-
-    return () => {
-      window.removeEventListener("resize", updateScrollWidth);
-    };
-  }, [issues]);
+  const autoplayPlugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
 
   return (
-    <div className="bg-white rounded-sm p-6 w-full overflow-hidden">
+    <div className="bg-white rounded-sm p-6 w-full overflow-hidden items-center justify-center">
       <h2 className="font-sans text-2xl md:text-4xl font-bold mb-6 text-gray-600 text-center">
         Recent Issues By Users
       </h2>
-      <div
-        className={`${
-          isAnimationReady ? "animate-scroll" : ""
-        } flex items-center justify-start`}
-        ref={scrollRef}
+      
+      <Carousel
+        plugins={[autoplayPlugin.current]}
+        className="items-center justify-center max-w-xs mx-auto"
+        onMouseEnter={autoplayPlugin.current.stop}
+        onMouseLeave={autoplayPlugin.current.reset}
       >
-        {issues.map((issue) => (
-          <div
-            key={issue.id}
-            className="border p-4 rounded-lg shadow-sm flex-shrink-0 mr-4 space-y-2"
-          >
-            <h3 className="text-lg md:text-xl font-semibold mb-2 text-center">
-              {issue.title.toUpperCase()}
-            </h3>
-            <p className="md:text-lg text-sm font-sans mb-2">
-              <strong>🔠 Description:</strong> {issue.description}
-            </p>
-            <p className="md:text-lg text-sm font-sans mb-2">
-              <strong>✅ Status:</strong> {issue.status}
-            </p>
-            <p className="md:text-lg text-sm font-sans mb-2">
-              <strong>👨🏾‍💻 Assignee:</strong> {issue.assignee}
-            </p>
-            <p className="md:text-lg text-sm font-sans mb-2">
-              <strong>🔼 Priority:</strong> {issue.priority}
-            </p>
-            <p className="md:text-lg text-sm font-sans mb-2">
-              <strong>🏷️ Tag:</strong> {issue.tags.map((tag) => `#${tag}`).join(", ")}
-            </p>
-            <p className="md:text-lg text-sm font-sans mb-2">
-              <strong>📅 Date Created:</strong> {issue.createdDate}
-            </p>
-          </div>
-        ))}
-      </div>
-
-      <style jsx>{`
-        .animate-scroll {
-          animation: scroll var(--animation-duration) linear infinite;
-        }
-        @keyframes scroll {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(calc(-1 * var(--scroll-width) / 2));
-          }
-        }
-      `}</style>
+        <CarouselContent className="items-center jus`">
+          {issues.map((issue) => (
+            <CarouselItem key={issue.id} className="p-2 items-center justify-center">
+              <Card className="h-full p-2 w-full items-center justify-center">
+                <CardHeader>
+                  <CardTitle className="text-lg font-sans font-bold text-center">
+                    {issue.title.toUpperCase()}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className=" items-center justify-center p-6">
+                  <span className="space-y-2">
+                  <p className="md:text-lg text-sm font-sans">
+                    <strong>🔠 Description:</strong> {issue.description}
+                  </p>
+                  <p className="md:text-lg text-sm font-sans">
+                    <strong>✅ Status:</strong> {issue.status}
+                  </p>
+                  <p className="md:text-lg text-sm font-sans">
+                    <strong>👨🏾‍💻 Assignee:</strong> {issue.assignee}
+                  </p>
+                  <p className="md:text-lg text-sm font-sans">
+                    <strong>🔼 Priority:</strong> {issue.priority}
+                  </p>
+                  <p className="md:text-lg text-sm font-sans">
+                    <strong>🏷️ Tags:</strong> {issue.tags.map((tag) => `#${tag}`).join(", ")}
+                  </p>
+                  <p className="md:text-lg text-sm font-sans">
+                    <strong>📅 Date Created:</strong> {issue.createdDate}
+                  </p>
+                  </span>
+                </CardContent>
+                <CardFooter className="flex justify-center text-sm">
+                  <span className="leading-none text-muted-foreground">
+                    Issue Details
+                  </span>
+                </CardFooter>
+              </Card>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
     </div>
   );
 };
