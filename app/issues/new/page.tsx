@@ -37,9 +37,14 @@ const NewIssuePage = () => {
     register,
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<IssueForm>({
     resolver: zodResolver(createIssueSchema),
+    defaultValues: {
+      status: "OPEN", // Set default status
+      priority: "LOW", // Set default priority
+    },
   });
 
   const [error, setError] = useState("");
@@ -94,7 +99,7 @@ const NewIssuePage = () => {
 
       <form className="space-y-3" onSubmit={onSubmit}>
         <TextField.Root placeholder="Issue Title" {...register("title")} />
-        {errors.title && <span>{errors.title.message}</span>}
+        {errors.title && <span className="text-red-500">{errors.title.message}</span>}
 
         <Controller
           name="description"
@@ -107,9 +112,9 @@ const NewIssuePage = () => {
             />
           )}
         />
-        {errors.description && <span>{errors.description.message}</span>}
+        {errors.description && <span className="text-red-500">{errors.description.message}</span>}
 
-        <Button type="submit" disabled={isSubmitting} size="3">
+        <Button type="submit" disabled={isSubmitting} size="3" className="bg-blue-500 text-white hover:bg-blue-600">
           {isSubmitting ? <Spinner /> : "Submit New Issue"}
         </Button>
       </form>

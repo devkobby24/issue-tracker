@@ -1,108 +1,124 @@
-import React, { useEffect, useState } from 'react';
-import { Pie } from 'react-chartjs-2';
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { Pie, PieChart, Tooltip, Cell } from "recharts";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../service/FireBaseConfig"; // Update with your Firebase config path
+
+import { TrendingUp } from "lucide-react";
 import {
-    Chart as ChartJS,
-    ArcElement,
-    Title,
-    Tooltip,
-    Legend,
-} from 'chart.js';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from '../service/FireBaseConfig';
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
-// Register the necessary chart.js components
-ChartJS.register(ArcElement, Title, Tooltip, Legend);
-
-interface StatusStatistics {
-    status: string;
-    count: number;
+interface IssueData {
+  status: string;
+  count: number;
+  fill: string;
 }
 
-const PieChart: React.FC = () => {
-    const [statusStatistics, setStatusStatistics] = useState<StatusStatistics[]>([]);
-    const [loading, setLoading] = useState<boolean>(true); // Loading state
+// You can customize the colors as per your requirement
+const colors = ["#4CAF50", "#FF9800", "#03A9F4", "#E91E63", "#9C27B0"];
 
-    useEffect(() => {
-        const fetchUserIssues = async () => {
-            setLoading(true); // Set loading state to true
-            try {
-                // Fetch user from localStorage
-                const userData = localStorage.getItem("user");
-                const user = userData ? JSON.parse(userData) : null;
+const PieChartComponent: React.FC = () => {
+  const [chartData, setChartData] = useState<IssueData[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null); // Store user email from localStorage
 
-                if (!user || !user.email) {
-                    console.error('No user found in localStorage.');
-                    return; // Exit if no user found
-                }
-
-                const userEmail = user.email; // Get user's email from localStorage
-                const issuesQuery = query(collection(db, 'issues'), where("userEmail", "==", userEmail)); // Query to fetch user's issues
-
-                const querySnapshot = await getDocs(issuesQuery);
-                const statusCount: Record<string, number> = {};
-
-                // Aggregate counts by status
-                querySnapshot.forEach(doc => {
-                    const data = doc.data();
-                    const status = data.status; // Ensure you have a status field
-                    if (status) {
-                        statusCount[status] = (statusCount[status] || 0) + 1; // Increment count for each status
-                    }
-                });
-
-                // Convert the status count object to an array of StatusStatistics
-                const statisticsArray: StatusStatistics[] = Object.entries(statusCount).map(([status, count]) => ({
-                    status,
-                    count,
-                }));
-
-                setStatusStatistics(statisticsArray);
-            } catch (error) {
-                console.error('Error fetching user issues:', error);
-            } finally {
-                setLoading(false); // Set loading state to false after fetching
-            }
-        };
-
-        fetchUserIssues();
-    }, []);
-
-    const labels = statusStatistics.map(stat => stat.status);
-    const dataCounts = statusStatistics.map(stat => stat.count);
-
-    const data = {
-        labels: labels,
-        datasets: [
-            {
-                label: 'Issues by Status',
-                data: dataCounts,
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.5)',
-                    'rgba(255, 99, 132, 0.5)',
-                    'rgba(255, 206, 86, 0.5)',
-                    'rgba(54, 162, 235, 0.5)',
-                    'rgba(255, 159, 64, 0.5)',
-                ],
-                borderColor: 'rgba(255, 255, 255, 1)',
-                borderWidth: 1,
-            },
-        ],
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true); // Set loading to true before fetching data
+      try {
+        // Retrieve user info from localStorage
+        const userData = localStorage.getItem("user");
+        const user = userData ? JSON.parse(userData) : null;
+  
+        if (!user || !user.email) {
+          console.error("No user found in localStorage.");
+          return; // Exit if no user found
+        }
+  
+        const userEmail = user.email;
+        const issuesQuery = query(
+          collection(db, "issues"),
+          where("userEmail", "==", userEmail) // Filter by user email
+        );
+  
+        const querySnapshot = await getDocs(issuesQuery);
+        const issueCountMap: Record<string, number> = {};
+  
+        // Process the issues data
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          const status = data.status || "Unknown"; // Adjust field name if needed
+  
+          // Count issues per status
+          if (status in issueCountMap) {
+            issueCountMap[status]++;
+          } else {
+            issueCountMap[status] = 1;
+          }
+        });
+  
+        // Convert the issue count map to chart data
+        const fetchedData: IssueData[] = Object.keys(issueCountMap).map((status, index) => ({
+          status,
+          count: issueCountMap[status],
+          fill: colors[index % colors.length], // Assuming colors is an array of color values
+        }));
+  
+        setChartData(fetchedData);
+      } catch (error) {
+        console.error("Error fetching issue data:", error);
+      } finally {
+        setLoading(false); // Set loading state to false after fetching
+      }
     };
-
-    return (
-        <div className='flex flex-col p-4 items-center justify-center'>
-            <h2 className="text-2xl md:text-4xl font-bold mb-4 text-center">Issue Status Distribution</h2>
-            {loading ? (
-                <div className="flex justify-center items-center h-64">
-                    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500"></div>
-                </div>
-            ) : (
-                <div className="w-full items-center justify-center">
-                    <Pie data={data} />
-                </div>
-            )}
+  
+    fetchData();
+  }, []); // Only trigger on initial mount
+  
+  return (
+    <div className="items-center justify-center sm:w-auto md:max-w-[400px]">
+    <Card className="flex flex-col items-center w-full h-[390px]">
+      <CardHeader className="items-center pb-0">
+        <CardTitle>Pie Chart - Issue Status</CardTitle>
+        <CardDescription>Distribution of Issues by Status</CardDescription>
+      </CardHeader>
+      <CardContent className="flex-1 pb-0">
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+          </div>
+        ) : (
+          <PieChart width={270} height={270}>
+            <Tooltip />
+            <Pie
+              data={chartData}
+              dataKey="count"
+              nameKey="status"
+              label
+              outerRadius={100}
+            >
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.fill} />
+              ))}
+            </Pie>
+          </PieChart>
+        )}
+      </CardContent>
+      <CardFooter className="flex-col gap-2 text-sm">
+        <div className="leading-none text-muted-foreground">
+          Showing issue status distribution
         </div>
-    );
+      </CardFooter>
+    </Card>
+    </div>
+  );
 };
 
-export default PieChart;
+export default PieChartComponent;

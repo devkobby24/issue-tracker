@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface Issue {
   id: number;
@@ -14,18 +14,26 @@ interface Issue {
 
 const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [isAnimationReady, setAnimationReady] = useState(false);
 
   useEffect(() => {
-    if (scrollRef.current) {
-      const scrollWidth = scrollRef.current.scrollWidth;
-      const animationDuration = scrollWidth / 70; // Adjust the speed of scrolling
+    const updateScrollWidth = () => {
+      if (scrollRef.current) {
+        const scrollWidth = scrollRef.current.scrollWidth;
+        const animationDuration = scrollWidth / 70;
 
-      scrollRef.current.style.setProperty("--scroll-width", `${scrollWidth}px`);
-      scrollRef.current.style.setProperty(
-        "--animation-duration",
-        `${animationDuration}s`
-      );
-    }
+        scrollRef.current.style.setProperty("--scroll-width", `${scrollWidth}px`);
+        scrollRef.current.style.setProperty("--animation-duration", `${animationDuration}s`);
+        setAnimationReady(true);
+      }
+    };
+
+    updateScrollWidth();
+    window.addEventListener("resize", updateScrollWidth);
+
+    return () => {
+      window.removeEventListener("resize", updateScrollWidth);
+    };
   }, [issues]);
 
   return (
@@ -34,7 +42,9 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
         Recent Issues By Users
       </h2>
       <div
-        className="animate-scroll items-center justify-center md:mb-4"
+        className={`${
+          isAnimationReady ? "animate-scroll" : ""
+        } flex items-center justify-start`}
         ref={scrollRef}
       >
         {issues.map((issue) => (
@@ -58,37 +68,7 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
               <strong>🔼 Priority:</strong> {issue.priority}
             </p>
             <p className="md:text-lg text-sm font-sans mb-2">
-              <strong>🏷️ Tag:</strong>{" "}
-              {issue.tags.map((tag) => `#${tag}`).join(", ")}
-            </p>
-            <p className="md:text-lg text-sm font-sans mb-2">
-              <strong>📅 Date Created:</strong> {issue.createdDate}
-            </p>
-          </div>
-        ))}
-        {issues.map((issue) => (
-          <div
-            key={issue.id}
-            className="border p-4 rounded-lg shadow-sm flex-shrink-0 mr-4 space-y-1"
-          >
-            <h3 className="text-lg md:text-xl font-semibold mb-2 text-center">
-              {issue.title.toUpperCase()}
-            </h3>
-            <p className="md:text-lg text-sm font-sans mb-2">
-              <strong>🔠 Description:</strong> {issue.description}
-            </p>
-            <p className="md:text-lg text-sm font-sans mb-2">
-              <strong>✅ Status:</strong> {issue.status}
-            </p>
-            <p className="md:text-lg text-sm font-sans mb-2">
-              <strong>👨🏾‍💻 Assignee:</strong> {issue.assignee}
-            </p>
-            <p className="md:text-lg text-sm font-sans mb-2">
-              <strong>🔼 Priority:</strong> {issue.priority}
-            </p>
-            <p className="md:text-lg text-sm font-sans mb-2">
-              <strong>🏷️ Tag:</strong>{" "}
-              {issue.tags.map((tag) => `#${tag}`).join(", ")}
+              <strong>🏷️ Tag:</strong> {issue.tags.map((tag) => `#${tag}`).join(", ")}
             </p>
             <p className="md:text-lg text-sm font-sans mb-2">
               <strong>📅 Date Created:</strong> {issue.createdDate}
@@ -99,7 +79,6 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
 
       <style jsx>{`
         .animate-scroll {
-          display: flex;
           animation: scroll var(--animation-duration) linear infinite;
         }
         @keyframes scroll {

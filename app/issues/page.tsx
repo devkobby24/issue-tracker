@@ -23,6 +23,7 @@ const IssuesPage = () => {
     title: string;
     description: string;
     status: string;
+    priority: "LOW" | "MEDIUM" | "HIGH"; // Adding priority to the Issue interface
     userEmail: string;
   }
 
@@ -33,22 +34,19 @@ const IssuesPage = () => {
   useEffect(() => {
     const fetchIssues = async () => {
       try {
-        // Fetch user from localStorage
         const userData = localStorage.getItem("user");
         const user = userData ? JSON.parse(userData) : null;
 
         if (!user || !user.email) {
           console.log("No user found in localStorage.");
-          setIssues([]); // No user, set issues to empty
+          setIssues([]);
           setLoading(false);
           return;
         }
 
-        const userEmail = user.email; // Get the user's email from localStorage
+        const userEmail = user.email;
+        console.log("Fetching issues for user:", userEmail);
 
-        console.log("Fetching issues for user:", userEmail); // Log the email for debugging
-
-        // Query Firestore to fetch issues for this user
         const issuesQuery = query(
           collection(db, "issues"),
           where("userEmail", "==", userEmail)
@@ -75,7 +73,7 @@ const IssuesPage = () => {
     setLoading(true);
     try {
       await deleteDoc(doc(db, "issues", id));
-      setIssues(issues.filter((issue) => issue.id !== id)); // Remove the issue from the state after deletion
+      setIssues(issues.filter((issue) => issue.id !== id));
       toast({ description: "Issue deleted successfully" });
     } catch (error) {
       console.error("Error deleting issue:", error);
@@ -106,6 +104,27 @@ const IssuesPage = () => {
     }
   };
 
+  const updateIssuePriority = async (
+    id: string,
+    priority: "LOW" | "MEDIUM" | "HIGH"
+  ) => {
+    try {
+      const issueRef = doc(db, "issues", id);
+      await updateDoc(issueRef, { priority });
+
+      setIssues((prevIssues) =>
+        prevIssues.map((issue) =>
+          issue.id === id ? { ...issue, priority } : issue
+        )
+      );
+
+      toast({ description: "Issue priority updated" });
+    } catch (error) {
+      toast({ description: "Failed to update issue priority" });
+      console.error("Error updating issue priority:", error);
+    }
+  };
+
   return (
     <div className="container space-y-5 font-sans min-h-[100vh] px-5 mt-5 min-w-full">
       <h1 className="text-2xl md:text-4xl font-bold font-sans mb-4 items-center justify-center flex">
@@ -131,6 +150,9 @@ const IssuesPage = () => {
                 <p className="text-sm font-medium text-blue-600">
                   Status: {issue.status}
                 </p>
+                <p className="text-sm font-medium text-yellow-600">
+                  Priority: {issue.priority}
+                </p>
                 <div className="flex space-x-2">
                   <Button
                     onClick={() => deleteIssue(issue.id)}
@@ -146,6 +168,7 @@ const IssuesPage = () => {
                   <IssueStatusButtons
                     issue={issue}
                     updateIssueStatus={updateIssueStatus}
+                    updateIssuePriority={updateIssuePriority}
                   />
                 </div>
               </div>

@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import IssuesCarousel from "./components/IssueCarousel";
-import ImageComponent from "./components/ImageComponent";
+import FeaturesSection from "./components/FeatureSection";
 import { issues } from "./Data";
 
 
@@ -85,7 +85,7 @@ export default function Home() {
         Get Started!
       </Button>
       <IssuesCarousel issues={issues} />
-      <ImageComponent />
+      <FeaturesSection />
       <LoginDialog open={openDialog} onOpenChange={setOpenDialog} onLogin={login} />
     </div>
   );

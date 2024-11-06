@@ -27,7 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} `}>
-      <body className={`${inter.className} min-h-[100vh]`}>
+      <body className={`${inter.className}`}>
         <GoogleOAuthProvider clientId={process.env.NEXT_GOOGLE_AUTH_CLIENT_ID!}>
         <Theme accentColor="violet">
           <NavBar />

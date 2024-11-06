@@ -1,15 +1,17 @@
-'use client';
-import BarChart from './../components/BarChart';
-import PieChart from '../components/PieChart';
-import CounterCard from '../components/CounterCard';
+"use client";
+
+import BarChart from "../components/BarChartComponent";
+import PieChartComponent from "../components/PieChart";
+import CounterCard from "../components/CounterCard";
+import LineChartComponent from "../components/LineChart";
 
 const StatisticsPage = () => {
   return (
-    <div className="space-y-8 flex flex-col lg:flex-row lg:space-x-8 justify-center items-center w-full min-h-[100vh]">
+    <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-rows-1 gap-6">
       <CounterCard />
+      <PieChartComponent />
       <BarChart />
-      <PieChart />
-      {/* <IssuesTable issues={issues} /> */}
+      <LineChartComponent />
     </div>
   );
 };
