@@ -7,7 +7,9 @@ import NavBar from './components/ui/NavBar'
 import { Theme, ThemePanel } from "@radix-ui/themes";
 import Footer from "./components/ui/Footer";
 import { Toaster } from "@/components/ui/toaster"
-import { GoogleOAuthProvider } from '@react-oauth/google'; 
+import {
+  ClerkProvider,
+} from '@clerk/nextjs' 
 
 
 const inter = Inter({
@@ -28,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} `}>
       <body className={`${inter.className}`}>
-        <GoogleOAuthProvider clientId={process.env.NEXT_GOOGLE_AUTH_CLIENT_ID!}>
+      <ClerkProvider dynamic>
         <Theme accentColor="violet">
           <NavBar />
           <main className="px-auto">
@@ -38,7 +40,7 @@ export default function RootLayout({
           <Toaster />
           <Footer />
         </Theme>
-        </GoogleOAuthProvider>
+        </ClerkProvider>
       </body>
     </html>
   )

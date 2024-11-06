@@ -23,6 +23,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useUser } from "@clerk/nextjs";
 
 interface MonthlyStatistics {
   month: string;
@@ -32,23 +33,20 @@ interface MonthlyStatistics {
 const BarChartComponent: React.FC = () => {
   const [chartData, setChartData] = useState<MonthlyStatistics[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-
+  const { user } = useUser(); // Fetching the user object from Clerk
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const userData = localStorage.getItem("user");
-        const user = userData ? JSON.parse(userData) : null;
-
-        if (!user || !user.email) {
-          console.error("No user found in localStorage.");
+        if (!user || !user.primaryEmailAddress) {
+          console.error("No user found in localStorage. Barchart will not render.");
           return;
         }
 
-        const userEmail = user.email;
+        const userEmail = user.primaryEmailAddress.emailAddress; // Use primaryEmailAddress
         const issuesQuery = query(
           collection(db, "issues"),
-          where("userEmail", "==", userEmail)
+          where("userEmail", "==", userEmail) // Fetch based on primary email address
         );
 
         const querySnapshot = await getDocs(issuesQuery);

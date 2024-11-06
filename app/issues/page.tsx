@@ -16,6 +16,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../service/FireBaseConfig";
+import { useUser } from "@clerk/nextjs";
 
 const IssuesPage = () => {
   interface Issue {
@@ -26,7 +27,7 @@ const IssuesPage = () => {
     priority: "LOW" | "MEDIUM" | "HIGH"; // Adding priority to the Issue interface
     userEmail: string;
   }
-
+  const { user } = useUser(); // Fetching the user object from Clerk
   const { toast } = useToast();
   const [issues, setIssues] = useState<Issue[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -34,17 +35,14 @@ const IssuesPage = () => {
   useEffect(() => {
     const fetchIssues = async () => {
       try {
-        const userData = localStorage.getItem("user");
-        const user = userData ? JSON.parse(userData) : null;
-
-        if (!user || !user.email) {
-          console.log("No user found in localStorage.");
+        if (!user || !user.primaryEmailAddress) {
+          console.log("No user or email found in Clerk. IssuePage");
           setIssues([]);
           setLoading(false);
           return;
         }
 
-        const userEmail = user.email;
+        const userEmail = user.primaryEmailAddress.emailAddress; // Using the primaryEmailAddress from the user object
         console.log("Fetching issues for user:", userEmail);
 
         const issuesQuery = query(
@@ -67,7 +65,7 @@ const IssuesPage = () => {
     };
 
     fetchIssues();
-  }, []);
+  }, [user]); // Re-fetch when the user object changes
 
   const deleteIssue = async (id: string) => {
     setLoading(true);

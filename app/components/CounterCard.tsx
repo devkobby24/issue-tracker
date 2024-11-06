@@ -18,6 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
+import { useUser } from "@clerk/nextjs";
 
 interface StatusStatistics {
   status: string;
@@ -28,21 +29,19 @@ const CounterCard: React.FC = () => {
   const [statusStatistics, setStatusStatistics] = useState<StatusStatistics[]>([]);
   const [loading, setLoading] = useState<boolean>(true); // Loading state
   const [totalIssues, setTotalIssues] = useState<number>(0); // Total issues
+  const { user } = useUser(); // Fetching the user object from Clerk
 
   useEffect(() => {
     const fetchUserIssues = async () => {
       setLoading(true); // Set loading state to true
       try {
-        // Fetch user from localStorage
-        const userData = localStorage.getItem("user");
-        const user = userData ? JSON.parse(userData) : null;
 
-        if (!user || !user.email) {
-          console.error("No user found in localStorage.");
+        if (!user || !user.primaryEmailAddress) {
+          console.error("No user found in localStorage. CounterCard will not render.");
           return; // Exit if no user found
         }
 
-        const userEmail = user.email; // Get user's email from localStorage
+        const userEmail = user.primaryEmailAddress?.emailAddress; // Get user's email from localStorage
         const issuesQuery = query(
           collection(db, "issues"),
           where("userEmail", "==", userEmail)

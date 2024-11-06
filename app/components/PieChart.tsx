@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useUser } from "@clerk/nextjs";
 
 interface IssueData {
   status: string;
@@ -27,22 +28,18 @@ const colors = ["#4CAF50", "#FF9800", "#03A9F4", "#E91E63", "#9C27B0"];
 const PieChartComponent: React.FC = () => {
   const [chartData, setChartData] = useState<IssueData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [userEmail, setUserEmail] = useState<string | null>(null); // Store user email from localStorage
+  const { user } = useUser();
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true); // Set loading to true before fetching data
       try {
-        // Retrieve user info from localStorage
-        const userData = localStorage.getItem("user");
-        const user = userData ? JSON.parse(userData) : null;
-  
-        if (!user || !user.email) {
-          console.error("No user found in localStorage.");
+        if (!user || !user.primaryEmailAddress) {
+          console.log("No user or email found in Clerk. PieChartComponent");
           return; // Exit if no user found
         }
   
-        const userEmail = user.email;
+        const userEmail = user.primaryEmailAddress.emailAddress;
         const issuesQuery = query(
           collection(db, "issues"),
           where("userEmail", "==", userEmail) // Filter by user email

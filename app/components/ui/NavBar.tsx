@@ -5,23 +5,19 @@ import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { AiFillBug } from "react-icons/ai";
 import classNames from "classnames";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { LiaDoorOpenSolid } from "react-icons/lia";
-import { Button } from "@/components/ui/button";
 import { googleLogout } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { UserButton, useUser } from "@clerk/nextjs"
 
 const NavBar = () => {
   const router = useRouter();
-  const [user, setUser] = useState<UserProfile | null>(null); // Define UserProfile type
   const currentPath = usePathname();
+  const { user, isLoaded } = useUser();
 
   // Fetch user from localStorage initially and listen for changes
   useEffect(() => {
     const handleStorageChange = () => {
       const updatedUser = localStorage.getItem("user");
-      setUser(updatedUser ? JSON.parse(updatedUser) : null);
     };
 
     // Initialize user state
@@ -42,12 +38,6 @@ const NavBar = () => {
     { label: "Dashboard", href: "/statistics" },
   ];
 
-  const handleLogout = () => {
-    googleLogout();
-    localStorage.removeItem("user");
-    setUser(null);
-    router.push("/");
-  };
 
   return (
     <nav className="flex px-2 md:px-4 font-sans h-14 items-center justify-between shadow-md">
@@ -72,26 +62,23 @@ const NavBar = () => {
           </Link>
         ))}
       </ul>
-      <div>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Image
-              src={user?.picture || "/user.jpg"} // Fallback for user picture
-              alt="User Profile"
-              width={50}
-              height={40}
-              className="rounded-full w-9 h-9 cursor-pointer"
-              priority={true}
-            />
-          </PopoverTrigger>
-          <PopoverContent className="w-40 mx-4 my-2 pl-3 bg-transparent border-transparent">
-            <Button onClick={handleLogout} className="flex items-center">
-              Log Out
-              <LiaDoorOpenSolid size={20} className="ml-1" />
-            </Button>
-          </PopoverContent>
-        </Popover>
-      </div>
+
+      {/* Sign-In Button */}
+      {!isLoaded ? ( // Show loading state if user data is not yet loaded
+          <p >Loading...</p>
+        ) : user ? (
+          <UserButton />
+        ) : (
+          <div className="space-x-3">
+            <Link href="/sign-in">
+            <p
+              className="px-4 py-2 text-blue-400 hover:text-blue-700"
+            >
+              sign-in
+            </p>
+            </Link>
+          </div>
+        )}
     </nav>
   );
 };

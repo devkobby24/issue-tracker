@@ -5,6 +5,7 @@ import { GitCommitVertical, TrendingUp } from "lucide-react"
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
 import { collection, getDocs, query, where } from "firebase/firestore"
 import { db } from "../service/FireBaseConfig"
+import { useUser } from "@clerk/nextjs";
 
 import {
   Card,
@@ -41,22 +42,18 @@ const chartConfig = {
 const LineChartComponent = () => {
   const [chartData, setChartData] = useState<any[]>([]) // Chart data
   const [loading, setLoading] = useState<boolean>(false) // Loading state
-  const [userEmail, setUserEmail] = useState<string | null>(null) // Store user email from localStorage
+  const {user} =useUser(); // Fetch the user object from Clerk
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true); // Set loading state to true before fetching data
-      try {
-        // Retrieve user info from localStorage
-        const userData = localStorage.getItem("user");
-        const user = userData ? JSON.parse(userData) : null;
-  
-        if (!user || !user.email) {
-          console.error("No user found in localStorage.");
+      try { 
+        if (!user || !user.primaryEmailAddress) {
+          console.log("No user or email found in Clerk. LineChartComponent");
           return; // Exit if no user found
         }
   
-        const userEmail = user.email;
+        const userEmail = user.primaryEmailAddress.emailAddress;
         const issuesQuery = query(
           collection(db, "issues"),
           where("userEmail", "==", userEmail) // Query based on user email
