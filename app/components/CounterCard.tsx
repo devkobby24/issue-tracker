@@ -117,7 +117,7 @@ const CounterCard: React.FC = () => {
           <Card className="flex-col min-w-[335px] h-[390px] md:w-[400px] p-0">
             <CardHeader className="items-center pb-0">
               <CardTitle>Total Issues Created</CardTitle>
-              <CardDescription>January - June 2024</CardDescription>
+              <CardDescription>Issues by count</CardDescription>
             </CardHeader>
             <CardContent className="flex-1 pb-0">
               <ChartContainer

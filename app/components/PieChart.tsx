@@ -85,7 +85,7 @@ const PieChartComponent: React.FC = () => {
     <div className="items-center justify-center sm:w-auto md:max-w-[400px]">
       <Card className="flex flex-col items-center w-full h-[390px]">
         <CardHeader className="items-center pb-0">
-          <CardTitle>Pie Chart - Issue Status</CardTitle>
+          <CardTitle>Issue Status</CardTitle>
           <CardDescription>Distribution of Issues by Status</CardDescription>
         </CardHeader>
         <CardContent className="flex-1 pb-0">

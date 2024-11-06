@@ -14,6 +14,9 @@ export default function SignInPage() {
     }
   }, [isSignedIn, user, router]);
 
+  // Show SignUp form only if the user is not signed in
+  if (isSignedIn) return null;
+
   return (
     <div className="flex flex-col min-h-screen w-full">
       <div className="flex flex-col justify-center items-center p-4">
