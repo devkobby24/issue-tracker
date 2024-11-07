@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import IssuesCarousel from "./components/IssueCarousel";
 import FeaturesSection from "./components/FeatureSection";
@@ -12,9 +12,6 @@ export default function Home() {
   const router = useRouter();
   const { user } = useUser();
 
-  // useEffect(() => {
-  //   console.log(user);
-  // }, []);
   const handleClick = () => {
     user ? router.push("/issues") : router.push("/sign-in");
   };
@@ -34,8 +31,8 @@ export default function Home() {
 function HeaderSection() {
   return (
     <>
-      <h1 className="text-4xl font-bold mb-6 text-black text-center">
-        Issue Tracker
+      <h1 className="text-4xl font-bold font-sans mb-6 text-black text-center">
+        TraceFlow
       </h1>
       <p className="text-lg text-gray-500 mb-4 text-center sm:text-md">
         Track and manage issues easily with our intuitive interface. Assign

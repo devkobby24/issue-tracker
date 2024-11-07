@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@radix-ui/themes";
+import { Button } from "../../components/ui/button";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { MdDeleteSweep } from "react-icons/md";
@@ -152,9 +152,14 @@ const IssuesPage = () => {
                   Priority: {issue.priority}
                 </p>
                 <div className="flex space-x-2">
+                  <IssueStatusButtons
+                    issue={issue}
+                    updateIssueStatus={updateIssueStatus}
+                    updateIssuePriority={updateIssuePriority}
+                  />
                   <Button
                     onClick={() => deleteIssue(issue.id)}
-                    className="text-red-500"
+                    variant={"destructive"}
                   >
                     <span className="block sm:hidden">
                       <MdDeleteSweep color="black" />
@@ -163,11 +168,6 @@ const IssuesPage = () => {
                       {loading ? "Loading..." : "Delete"}
                     </span>
                   </Button>
-                  <IssueStatusButtons
-                    issue={issue}
-                    updateIssueStatus={updateIssueStatus}
-                    updateIssuePriority={updateIssuePriority}
-                  />
                 </div>
               </div>
             ))
@@ -179,7 +179,7 @@ const IssuesPage = () => {
         </div>
       )}
 
-      <Button className="mt-4" size="3">
+      <Button className="mt-4" size={"default"}>
         <Link href={"/issues/new"}>Create An Issue</Link>
       </Button>
     </div>
