@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 
 const NavBar = () => {
   const currentPath = usePathname();
-  const { user, isLoaded } = useUser();
+  const { user } = useUser();
 
   const links = [
     { label: "Home", href: "/" },
@@ -19,7 +19,7 @@ const NavBar = () => {
   ];
 
   return (
-    <nav className="flex px-2 md:px-4 font-sans h-14 items-center justify-between shadow-md">
+    <nav className="flex px-2 md:px-4 font-sans h-14 items-center justify-between shadow-md fixed z-50 bg-white w-full">
       <ul className="flex space-x-2 justify-center items-center">
         <Link href="/" aria-label="Home">
           <AiFillBug size={25} />
@@ -38,15 +38,13 @@ const NavBar = () => {
             )}
             href={href}
           >
-            {label}
+            <li>{label}</li>
           </Link>
         ))}
       </ul>
 
       {/* Sign-In Button */}
-      {!isLoaded ? ( // Show loading state if user data is not yet loaded
-        <p className="text-xs text-gray-500">Loading...</p>
-      ) : user ? (
+      {user ? (
         <UserButton />
       ) : (
         <Link href="/sign-in">

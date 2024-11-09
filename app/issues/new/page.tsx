@@ -1,6 +1,6 @@
 "use client";
-import { Button, Callout, TextField } from "@radix-ui/themes";
-import dynamic from "next/dynamic"; // Dynamically import SimpleMDE
+import { Callout } from "@radix-ui/themes";
+import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -9,25 +9,19 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssueSchema } from "@/app/validationSchema";
 import { z } from "zod";
-import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
 import { useToast } from "@/hooks/use-toast";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { db } from "../../service/FireBaseConfig";
 import { useUser } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
-interface User {
-  name: string;
-  email: string;
-  user: string;
-}
-
-// Dynamically import SimpleMDE to load it only on the client side
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
-  ssr: false, // Disable SSR
-  loading: () => <Spinner />, // Show a spinner while loading the editor
+  ssr: false,
+  loading: () => <Spinner />,
 });
 
 const NewIssuePage = () => {
@@ -39,13 +33,12 @@ const NewIssuePage = () => {
     register,
     control,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<IssueForm>({
     resolver: zodResolver(createIssueSchema),
     defaultValues: {
-      status: "OPEN", // Set default status
-      priority: "LOW", // Set default priority
+      status: "OPEN",
+      priority: "LOW",
     },
   });
 
@@ -54,42 +47,37 @@ const NewIssuePage = () => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setSubmitting(true);
-      // const userData = localStorage.getItem("user"); // Get user data from localStorage
-      // const user: User | null = userData ? JSON.parse(userData) : null; // Parse user data
-
-      // Check if the user is logged in
       if (!user) {
-        // Prompt user to log in or redirect to login page
         toast({ description: "You need to be logged in to submit an issue." });
         setSubmitting(false);
-        return; // Exit early if user is not authenticated
+        return;
       }
 
-      // Use user's email or some unique identifier to create a unique document ID
-      const uniqueId = `${user.primaryEmailAddress?.emailAddress.replace(/[@.]/g, "_")}_${Date.now()}`; // Replace special characters in email
-      // Note: Ensure that your user data is sanitized and does not contain special characters that might cause issues in Firestore
+      const uniqueId = `${user.primaryEmailAddress?.emailAddress.replace(
+        /[@.]/g,
+        "_"
+      )}_${Date.now()}`;
 
-      // Use Firebase Firestore to save the issue
       await setDoc(doc(collection(db, "issues"), uniqueId), {
-        ...data, // Spread the form data
-        userEmail: user.primaryEmailAddress?.emailAddress, // Include the user's email
-        id: uniqueId, // Add the unique document ID
-        createdAt: Date.now(), // Include the current timestamp
+        ...data,
+        userEmail: user.primaryEmailAddress?.emailAddress,
+        id: uniqueId,
+        createdAt: Date.now(),
       });
 
-      router.push("/issues"); // Redirect to the issues page
-      toast({ description: "Issue created successfully" }); // Show success message
+      router.push("/issues");
+      toast({ description: "Issue created successfully" });
     } catch (error) {
-      console.error("Error creating issue:", error); // Log the error
-      setError("An error occurred while creating the issue."); // Set error state
-      toast({ description: "An error occurred while creating the issue." }); // Show error message
+      console.error("Error creating issue:", error);
+      setError("An error occurred while creating the issue.");
+      toast({ description: "An error occurred while creating the issue." });
     } finally {
-      setSubmitting(false); // Ensure loading state is reset
+      setSubmitting(false);
     }
   });
 
   return (
-    <div className="space-y-5 max-w-xl min-h-[100vh] px-4 mt-5">
+    <div className="space-y-5 max-w-xl min-h-[85vh] px-4 mt-5">
       {error && (
         <Callout.Root>
           <Callout.Icon>
@@ -99,9 +87,15 @@ const NewIssuePage = () => {
         </Callout.Root>
       )}
 
-      <form className="space-y-3" onSubmit={onSubmit}>
-        <TextField.Root placeholder="Issue Title" {...register("title")} />
-        {errors.title && <span className="text-red-500">{errors.title.message}</span>}
+      <form className="space-y-3 flex flex-col" onSubmit={onSubmit}>
+        <Textarea
+          placeholder="Issue Title"
+          {...register("title")}
+          className="border-gray-400 border rounded-md p-2"
+        />
+        {errors.title && (
+          <span className="text-red-500">{errors.title.message}</span>
+        )}
 
         <Controller
           name="description"
@@ -111,12 +105,21 @@ const NewIssuePage = () => {
               value={value || ""}
               onChange={onChange}
               placeholder="Description"
+              className="border-gray-400 border rounded-md p-2"
             />
           )}
         />
-        {errors.description && <span className="text-red-500">{errors.description.message}</span>}
+        {errors.description && (
+          <span className="text-red-500">{errors.description.message}</span>
+        )}
 
-        <Button type="submit" disabled={isSubmitting} size="3" className="bg-blue-500 text-white hover:bg-blue-600">
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          variant={"default"}
+          size={"default"}
+          className="text-white hover:bg-blue-600"
+        >
           {isSubmitting ? <Spinner /> : "Submit New Issue"}
         </Button>
       </form>

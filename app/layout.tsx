@@ -27,7 +27,7 @@ export default function RootLayout({
       <body className={`${inter.className}`}>
         <ClerkProvider dynamic>
           <NavBar />
-          <main className="px-auto">{children}</main>
+          <main className="px-auto pt-20">{children}</main>
           <Toaster />
           <Footer />
         </ClerkProvider>

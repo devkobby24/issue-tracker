@@ -1,7 +1,6 @@
 import { HiOutlineMail } from "react-icons/hi";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaLinkedin } from "react-icons/fa";
-import { IoLogoWhatsapp } from "react-icons/io";
 
 function Footer() {
   return (
@@ -26,13 +25,6 @@ function Footer() {
         className="hover:text-gray-400 transition"
       >
         <FaLinkedin size={24} />
-      </a>
-      <a
-        href="https://wa.me/233547099317"
-        target="_blank"
-        className="hover:text-gray-400 transition"
-      >
-        <IoLogoWhatsapp size={24} />
       </a>
     </div>
   );

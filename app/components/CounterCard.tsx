@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../service/FireBaseConfig";
-import { TrendingUp } from "lucide-react";
 import {
   Label,
   PolarGrid,

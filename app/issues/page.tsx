@@ -124,10 +124,17 @@ const IssuesPage = () => {
   };
 
   return (
-    <div className="container space-y-5 font-sans min-h-[100vh] px-5 mt-5 min-w-full">
+    <div className="container space-y-5 flex flex-col items-center font-sans min-h-[100vh] px-5 mt-5 min-w-full">
       <h1 className="text-2xl md:text-4xl font-bold font-sans mb-4 items-center justify-center flex">
         My Issues <FaBugs />
       </h1>
+
+      <Button
+        className="mt-4"
+        size={"default"}
+      >
+        <Link href={"/issues/new"}>Create An Issue</Link>
+      </Button>
 
       {loading ? (
         <div className="flex justify-center items-center h-64">
@@ -178,10 +185,6 @@ const IssuesPage = () => {
           )}
         </div>
       )}
-
-      <Button className="mt-4" size={"default"}>
-        <Link href={"/issues/new"}>Create An Issue</Link>
-      </Button>
     </div>
   );
 };
