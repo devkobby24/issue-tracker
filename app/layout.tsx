@@ -6,6 +6,7 @@ import NavBar from "./components/ui/NavBar";
 import Footer from "./components/ui/Footer";
 import { Toaster } from "@/components/ui/toaster";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Analytics } from "@vercel/analytics/react"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default function RootLayout({
         <ClerkProvider dynamic>
           <NavBar />
           <main className="px-auto pt-20">{children}</main>
+          <Analytics/>
           <Toaster />
           <Footer />
         </ClerkProvider>
