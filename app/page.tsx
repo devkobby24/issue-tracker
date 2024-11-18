@@ -31,7 +31,7 @@ export default function Home() {
 function HeaderSection() {
   return (
     <>
-      <h1 className="text-4xl font-bold font-sans mb-6 text-black text-center">
+      <h1 className="text-4xl font-bold mb-6 text-black text-center">
         TraceFlow
       </h1>
       <p className="text-lg text-gray-500 mb-4 text-center sm:text-md">

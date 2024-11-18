@@ -111,7 +111,7 @@ const CounterCard: React.FC = () => {
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500"></div>
         </div>
       ) : (
-        <div className="sm:w-full">
+        <div className="w-full">
           {/* Card for total issues using Radial Chart */}
           <Card className="flex-col min-w-[335px] h-[390px] md:w-[400px] p-0">
             <CardHeader className="items-center pb-0">

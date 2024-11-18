@@ -1,16 +1,15 @@
 import "./globals.css";
 import "./theme-config.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Outfit } from "next/font/google";
 import NavBar from "./components/ui/NavBar";
 import Footer from "./components/ui/Footer";
 import { Toaster } from "@/components/ui/toaster";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react"
 
-const inter = Inter({
+const outfit = Outfit({
   subsets: ["latin"],
-  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
@@ -24,8 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} `}>
-      <body className={`${inter.className}`}>
+    <html lang="en">
+      <body className={`${outfit.className}`}>
         <ClerkProvider dynamic>
           <NavBar />
           <main className="px-auto pt-20">{children}</main>

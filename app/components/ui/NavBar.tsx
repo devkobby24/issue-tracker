@@ -19,7 +19,7 @@ const NavBar = () => {
   ];
 
   return (
-    <nav className="flex px-2 md:px-4 font-sans h-14 items-center justify-between shadow-md fixed z-50 bg-white w-full">
+    <nav className="flex px-2 md:px-4 h-14 items-center justify-between shadow-md fixed z-50 bg-white w-full">
       <ul className="flex space-x-2 justify-center items-center">
         <li>
           <Link href="/" aria-label="Home">

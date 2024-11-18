@@ -36,7 +36,7 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
 
   return (
     <div className="bg-white rounded-sm px-6 w-full overflow-hidden items-center justify-center">
-      <h2 className="font-sans text-2xl md:text-4xl font-bold mb-6 text-gray-600 text-center">
+      <h2 className=" text-2xl md:text-4xl font-bold mb-6 text-gray-600 text-center">
         Recent Issues By Users
       </h2>
 
@@ -54,29 +54,29 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
             >
               <Card className="h-full p-2 w-full items-center justify-center">
                 <CardHeader>
-                  <CardTitle className="text-lg font-sans font-bold text-center">
+                  <CardTitle className="text-lg  font-bold text-center">
                     {issue.title.toUpperCase()}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className=" items-center justify-center p-6">
                   <span className="space-y-2">
-                    <p className="md:text-md text-sm font-sans">
+                    <p className="md:text-md text-sm ">
                       <strong>🔠 Description:</strong> {issue.description}
                     </p>
-                    <p className="md:text-md text-sm font-sans">
+                    <p className="md:text-md text-sm ">
                       <strong>✅ Status:</strong> {issue.status}
                     </p>
-                    <p className="md:text-md text-sm font-sans">
+                    <p className="md:text-md text-sm ">
                       <strong>👨🏾‍💻 Assignee:</strong> {issue.assignee}
                     </p>
-                    <p className="md:text-md text-sm font-sans">
+                    <p className="md:text-md text-sm ">
                       <strong>🔼 Priority:</strong> {issue.priority}
                     </p>
-                    <p className="md:text-md text-sm font-sans">
+                    <p className="md:text-md text-sm ">
                       <strong>🏷️ Tags:</strong>{" "}
                       {issue.tags.map((tag) => `#${tag}`).join(", ")}
                     </p>
-                    <p className="md:text-md text-sm font-sans">
+                    <p className="md:text-md text-sm ">
                       <strong>📅 Date Created:</strong> {issue.createdDate}
                     </p>
                   </span>

@@ -124,15 +124,12 @@ const IssuesPage = () => {
   };
 
   return (
-    <div className="container space-y-5 flex flex-col items-center font-sans min-h-[100vh] px-5 mt-5 min-w-full">
-      <h1 className="text-2xl md:text-4xl font-bold font-sans mb-4 items-center justify-center flex">
+    <div className="container space-y-5 flex flex-col items-center min-h-[100vh] px-5 mt-5 min-w-full">
+      <h1 className="text-2xl md:text-4xl font-bold mb-4 items-center justify-center flex">
         My Issues <FaBugs />
       </h1>
 
-      <Button
-        className="mt-4"
-        size={"default"}
-      >
+      <Button className="mt-4" size={"default"}>
         <Link href={"/issues/new"}>Create An Issue</Link>
       </Button>
 
@@ -141,7 +138,7 @@ const IssuesPage = () => {
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500"></div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center justify-center">
           {issues.length > 0 ? (
             issues.map((issue) => (
               <div
@@ -179,9 +176,11 @@ const IssuesPage = () => {
               </div>
             ))
           ) : (
+            <div className="flex items-center justify-center">
             <p className="text-gray-500 text-center mt-4">
               No issues found. Start by creating a new issue!
             </p>
+            </div>
           )}
         </div>
       )}
