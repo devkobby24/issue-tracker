@@ -42,11 +42,11 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
 
       <Carousel
         plugins={[autoplayPlugin.current]}
-        className="items-center justify-center max-w-xs mx-auto"
+        className="flex items-center justify-center max-w-xs mx-auto"
         onMouseEnter={autoplayPlugin.current.stop}
         onMouseLeave={autoplayPlugin.current.reset}
       >
-        <CarouselContent className="flex items-center justify-center p-6">
+        <CarouselContent>
           {issues.map((issue) => (
             <CarouselItem
               key={issue.id}
