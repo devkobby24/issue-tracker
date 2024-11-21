@@ -42,7 +42,7 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
 
       <Carousel
         plugins={[autoplayPlugin.current]}
-        className="flex items-center justify-center max-w-xs mx-auto"
+        className=" max-w-xs mx-5"
         onMouseEnter={autoplayPlugin.current.stop}
         onMouseLeave={autoplayPlugin.current.reset}
       >
@@ -50,7 +50,7 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
           {issues.map((issue) => (
             <CarouselItem
               key={issue.id}
-              className="p-2 items-center justify-center"
+              className="p-2 flex items-center justify-center"
             >
               <Card className="h-full p-2 w-full items-center justify-center">
                 <CardHeader>
