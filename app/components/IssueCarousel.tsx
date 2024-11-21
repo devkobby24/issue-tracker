@@ -35,30 +35,27 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
   );
 
   return (
-    <div className="bg-white rounded-sm px-6 w-full overflow-hidden items-center justify-center">
+    <div className="bg-white rounded-sm px-6 w-full overflow-hidden flex flex-col items-center justify-center">
       <h2 className=" text-2xl md:text-4xl font-bold mb-6 text-gray-600 text-center">
         Recent Issues By Users
       </h2>
 
       <Carousel
         plugins={[autoplayPlugin.current]}
-        className=" max-w-xs mx-5"
+        className=" md:w-[350px] mx-5 w-[270px] h-[350px]"
         onMouseEnter={autoplayPlugin.current.stop}
         onMouseLeave={autoplayPlugin.current.reset}
       >
         <CarouselContent>
           {issues.map((issue) => (
-            <CarouselItem
-              key={issue.id}
-              className="p-2 flex items-center justify-center"
-            >
-              <Card className="h-full p-2 w-full items-center justify-center">
+            <CarouselItem key={issue.id}>
+              <Card className="h-[350px] w-full flex flex-col items-center justify-center border-2">
                 <CardHeader>
-                  <CardTitle className="text-lg  font-bold text-center">
+                  <CardTitle className="text-lg font-bold text-center">
                     {issue.title.toUpperCase()}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="items-center justify-center p-6">
+                <CardContent>
                   <span className="space-y-2">
                     <p className="md:text-md text-sm ">
                       <strong>🔠 Description:</strong> {issue.description}
@@ -81,7 +78,7 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
                     </p>
                   </span>
                 </CardContent>
-                <CardFooter className="flex justify-center text-sm">
+                <CardFooter>
                   <span className="leading-none text-muted-foreground">
                     Issue Details
                   </span>
