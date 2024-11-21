@@ -46,7 +46,7 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
         onMouseEnter={autoplayPlugin.current.stop}
         onMouseLeave={autoplayPlugin.current.reset}
       >
-        <CarouselContent>
+        <CarouselContent className="flex items-center justify-center p-6">
           {issues.map((issue) => (
             <CarouselItem
               key={issue.id}
@@ -58,7 +58,7 @@ const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
                     {issue.title.toUpperCase()}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className=" items-center justify-center p-6">
+                <CardContent className="items-center justify-center p-6">
                   <span className="space-y-2">
                     <p className="md:text-md text-sm ">
                       <strong>🔠 Description:</strong> {issue.description}
