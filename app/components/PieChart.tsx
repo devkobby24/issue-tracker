@@ -82,13 +82,13 @@ const PieChartComponent: React.FC = () => {
   }, [user]); // Only trigger on initial mount
 
   return (
-    <div className="items-center justify-center sm:w-auto md:max-w-[400px]">
-      <Card className="flex flex-col items-center w-full h-[390px]">
+    <div className="items-center justify-center md:max-w-[400px]">
+      <Card className="flex flex-col items-center w-full md:w-[400px] h-[390px]">
         <CardHeader className="items-center pb-0">
           <CardTitle>Issue Status</CardTitle>
           <CardDescription>Distribution of Issues by Status</CardDescription>
         </CardHeader>
-        <CardContent className="flex-1 pb-0">
+        <CardContent className="flex pb-0">
           {loading ? (
             <div className="flex flex-col justify-center items-center gap-4 my-10">
               <ArrowDownToDot className="animate-bounce" />

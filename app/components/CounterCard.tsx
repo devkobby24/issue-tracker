@@ -107,8 +107,7 @@ const CounterCard: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center md:max-w-[400px] ">
-      {/* Card for total issues using Radial Chart */}
-      <Card className="flex-col min-w-full  md:w-[400px] p-0 min-h-[390px]">
+      <Card className="flex-col w-[320px] md:w-[400px] p-0 min-h-[390px]">
         <CardHeader className="items-center pb-0">
           <CardTitle>Total Issues Created</CardTitle>
           <CardDescription>Issues by count</CardDescription>

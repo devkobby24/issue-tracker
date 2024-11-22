@@ -176,10 +176,10 @@ const IssuesPage = () => {
                     className="border-gray-400 border-2 rounded-xl text-lg"
                     variant={"destructive"}
                   >
-                    <span className="block sm:hidden">
+                    <span className="block lg:hidden">
                       <Trash2 color="black" />
                     </span>
-                    <span className="hidden sm:block">
+                    <span className="hidden lg:block">
                       {loading ? "Loading..." : "Delete"}
                     </span>
                   </Button>

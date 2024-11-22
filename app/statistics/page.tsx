@@ -7,11 +7,15 @@ import LineChartComponent from "../components/LineChart";
 
 const StatisticsPage = () => {
   return (
-    <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 items-center justify-center lg:ml-80">
-      <CounterCard />
-      <PieChartComponent />
-      <BarChart />
-      <LineChartComponent />
+    <div className="p-6 gap-4 flex flex-col items-center justify-center my-10">
+      <div className="flex w-full flex-col gap-5 md:flex-row items-center justify-center">
+        <CounterCard />
+        <PieChartComponent />
+      </div>
+      <div className="flex w-full flex-col gap-5 md:flex-row items-center justify-center">
+        <BarChart />
+        <LineChartComponent />
+      </div>
     </div>
   );
 };

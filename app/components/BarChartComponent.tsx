@@ -84,8 +84,8 @@ const BarChartComponent: React.FC = () => {
   }, [user]);
 
   return (
-    <div className="flex-col items-center justify-center sm:w-auto md:max-w-[400px]">
-      <Card className="text-center h-[400px] max-w-[400px]">
+    <div className="flex items-center justify-center sm:w-auto md:max-w-[400px]">
+      <Card className="text-center h-[400px] max-w-[400px] md:w-[400px]">
         <CardHeader>
           <CardTitle>Issue Statistics</CardTitle>
           <CardDescription>Monthly Issue Counts</CardDescription>

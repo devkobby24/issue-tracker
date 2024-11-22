@@ -98,8 +98,8 @@ const LineChartComponent = () => {
   }, [user]);
 
   return (
-    <div className="flex items-center justify-center sm:w-auto md:max-w-[400px]">
-      <Card className="flex-1 max-w-[400px] md:h-[400px]">
+    <div className="flex items-center justify-center  md:max-w-[400px]">
+      <Card className=" max-w-[400px] md:h-[400px] md:w-[400px]">
         <CardHeader className="text-center mb-3 bg-transparent">
           <CardTitle>Issue Count by Priority</CardTitle>
           <CardDescription>Count of issues by priority level</CardDescription>
