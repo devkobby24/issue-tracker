@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { GitCommitVertical, TrendingUp } from "lucide-react";
+import { ArrowDownToDot, GitCommitVertical, TrendingUp } from "lucide-react";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../service/FireBaseConfig";
@@ -106,8 +106,9 @@ const LineChartComponent = () => {
         </CardHeader>
         <CardContent className="pt-2">
           {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500"></div>
+            <div className="flex flex-col justify-center items-center gap-4 my-10">
+              <ArrowDownToDot className="animate-bounce" />
+              <p className="text-sm">Fetching Stats...</p>
             </div>
           ) : (
             <ChartContainer

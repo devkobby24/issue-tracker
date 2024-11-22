@@ -5,7 +5,7 @@ import { Pie, PieChart, Tooltip, Cell } from "recharts";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../service/FireBaseConfig"; // Update with your Firebase config path
 
-import { TrendingUp } from "lucide-react";
+import { ArrowDownToDot } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -90,8 +90,9 @@ const PieChartComponent: React.FC = () => {
         </CardHeader>
         <CardContent className="flex-1 pb-0">
           {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500"></div>
+            <div className="flex flex-col justify-center items-center gap-4 my-10">
+              <ArrowDownToDot className="animate-bounce" />
+              <p className="text-sm">Fetching Stats...</p>
             </div>
           ) : (
             <PieChart width={270} height={270}>

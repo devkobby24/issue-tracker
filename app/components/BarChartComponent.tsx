@@ -24,6 +24,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useUser } from "@clerk/nextjs";
+import { ArrowDownToDot, RefreshCcw } from "lucide-react";
 
 interface MonthlyStatistics {
   month: string;
@@ -93,8 +94,9 @@ const BarChartComponent: React.FC = () => {
           {" "}
           {/* Remove padding */}
           {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500"></div>
+            <div className="flex flex-col justify-center items-center gap-4 my-10">
+              <ArrowDownToDot className="animate-bounce" />
+              <p className="text-sm">Fetching Stats...</p>
             </div>
           ) : (
             <ResponsiveContainer width="100%" height={250}>

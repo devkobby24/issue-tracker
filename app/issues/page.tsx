@@ -17,6 +17,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../service/FireBaseConfig";
 import { useUser } from "@clerk/nextjs";
+import { Bug, RefreshCcw, Trash2 } from "lucide-react";
 
 const IssuesPage = () => {
   interface Issue {
@@ -26,7 +27,9 @@ const IssuesPage = () => {
     status: string;
     priority: "LOW" | "MEDIUM" | "HIGH"; // Adding priority to the Issue interface
     userEmail: string;
+    createdAt: number; // Adding createdAt field
   }
+
   const { user } = useUser(); // Fetching the user object from Clerk
   const { toast } = useToast();
   const [issues, setIssues] = useState<Issue[]>([]);
@@ -51,10 +54,15 @@ const IssuesPage = () => {
         );
         const querySnapshot = await getDocs(issuesQuery);
 
-        const fetchedIssues: Issue[] = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as Issue[];
+        const fetchedIssues: Issue[] = querySnapshot.docs
+          .map(
+            (doc) =>
+              ({
+                id: doc.id,
+                ...doc.data(),
+              } as Issue)
+          )
+          .sort((a, b) => b.createdAt - a.createdAt); // Sorting by createdAt in descending order
 
         setIssues(fetchedIssues);
       } catch (error) {
@@ -124,28 +132,30 @@ const IssuesPage = () => {
   };
 
   return (
-    <div className="container space-y-5 flex flex-col items-center min-h-[100vh] px-5 mt-5 min-w-full">
+    <div className="flex flex-col items-center min-h-[100vh] px-5 mt-5 w-full">
       <h1 className="text-2xl md:text-4xl font-bold mb-4 items-center justify-center flex">
         My Issues <FaBugs />
       </h1>
 
-      <Button className="mt-4" size={"default"}>
+      <Button className="my-10" size={"default"}>
         <Link href={"/issues/new"}>Create An Issue</Link>
       </Button>
 
       {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-500"></div>
+        <div className="flex justify-center items-center gap-4">
+          <RefreshCcw className="animate-spin" />
+          <p className="text-sm">Fetching Issues...</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-center justify-center">
-          {issues.length > 0 ? (
+        <div className="flex flex-col md:grid md:grid-cols-2 xl:grid-cols-4 gap-4 items-center justify-center">
+          {issues?.length > 0 &&
             issues.map((issue) => (
               <div
                 key={issue.id}
-                className="border border-gray-300 rounded-lg p-4 shadow transition-all hover:scale-105 duration-200 space-y-2 bg-slate-100"
+                className="border border-gray-300 rounded-lg p-4 shadow-md transition-all hover:shadow-stone-500 space-y-2 bg-slate-100 w-full max-w-[400px] md:min-h-[400px]"
               >
-                <h2 className="text-lg font-semibold mb-2">
+                <h2 className="text-lg font-semibold mb-2 flex items-center gap-4">
+                  <Bug />
                   {issue.title.toUpperCase()}
                 </h2>
                 <p className="text-gray-500">{issue.description}</p>
@@ -155,7 +165,7 @@ const IssuesPage = () => {
                 <p className="text-sm font-medium text-yellow-600">
                   Priority: {issue.priority}
                 </p>
-                <div className="flex space-x-2">
+                <div className="flex items-center justify-center gap-3">
                   <IssueStatusButtons
                     issue={issue}
                     updateIssueStatus={updateIssueStatus}
@@ -163,10 +173,11 @@ const IssuesPage = () => {
                   />
                   <Button
                     onClick={() => deleteIssue(issue.id)}
+                    className="border-gray-400 border-2 rounded-xl text-lg"
                     variant={"destructive"}
                   >
                     <span className="block sm:hidden">
-                      <MdDeleteSweep color="black" />
+                      <Trash2 color="black" />
                     </span>
                     <span className="hidden sm:block">
                       {loading ? "Loading..." : "Delete"}
@@ -174,15 +185,14 @@ const IssuesPage = () => {
                   </Button>
                 </div>
               </div>
-            ))
-          ) : (
-            <div className="flex items-center justify-center">
-            <p className="text-gray-500 text-center mt-4">
-              No issues found. Start by creating a new issue!
-            </p>
-            </div>
-          )}
+            ))}
         </div>
+      )}
+
+      {!issues && (
+        <p className="text-gray-500 mt-4 ">
+          No issues found. Start by creating a new issue!
+        </p>
       )}
     </div>
   );

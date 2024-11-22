@@ -31,7 +31,7 @@ interface Issue {
 
 const IssuesCarousel: React.FC<{ issues: Issue[] }> = ({ issues }) => {
   const autoplayPlugin = useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: true })
+    Autoplay({ delay: 5000, stopOnInteraction: true })
   );
 
   return (
