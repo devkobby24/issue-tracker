@@ -84,8 +84,8 @@ const BarChartComponent: React.FC = () => {
   }, [user]);
 
   return (
-    <div className="flex items-center justify-center sm:w-auto md:max-w-[400px]">
-      <Card className="text-center h-[400px] max-w-[400px] md:w-[400px]">
+    <div className="flex items-center justify-center w-full md:max-w-[400px]">
+      <Card className="text-center h-[400px]  md:w-[400px]">
         <CardHeader>
           <CardTitle>Issue Statistics</CardTitle>
           <CardDescription>Monthly Issue Counts</CardDescription>
@@ -94,7 +94,7 @@ const BarChartComponent: React.FC = () => {
           {" "}
           {/* Remove padding */}
           {loading ? (
-            <div className="flex flex-col justify-center items-center gap-4 my-10">
+            <div className="flex flex-col justify-center w-full items-center gap-4 my-10">
               <ArrowDownToDot className="animate-bounce" />
               <p className="text-sm">Fetching Stats...</p>
             </div>
